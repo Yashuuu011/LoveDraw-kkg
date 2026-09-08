@@ -1,6 +1,8 @@
-# ❤️ LoveDraw — Full-Stack Romantic "Love Lottery" Application
+# ❤️ LoveDraw — Educational Full-Stack Romantic Web Application
 
-LoveDraw is a premium, romantic community web platform combining daily love note reminders in an interactive 3D animated envelope, weekly and monthly couple prize draws, a safe demo payment gateway, photo memories gallery, and a cinematic winner reveal experience.
+> 🎓 **Educational & Portfolio Project Notice**: LoveDraw is built strictly for educational learning, demonstration, and web development portfolio purposes. All draws, entries, and QR scans are 100% free mock simulations. No real money or actual financial transactions take place.
+
+LoveDraw is a romantic community web platform combining daily love note reminders in an interactive 3D animated envelope, weekly and monthly couple prize draws, a safe demo payment gateway, photo memories gallery, and a cinematic winner reveal experience.
 
 ---
 

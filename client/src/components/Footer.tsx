@@ -59,19 +59,19 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Column 4: Demo Mode Notice */}
+          {/* Column 4: Educational Demo Notice */}
           <div className="space-y-3">
             <h4 className="text-sm font-semibold text-gold-300 uppercase tracking-wider font-serif flex items-center gap-1.5">
               <Shield className="w-4 h-4 text-gold-400" />
-              Demo Mode Notice
+              Educational Project
             </h4>
             <div className="p-3.5 rounded-2xl glass-card border border-gold-500/30 text-xs text-blush-200 leading-snug space-y-2">
               <div className="flex items-center gap-1.5 text-gold-300 font-semibold">
                 <Lock className="w-3.5 h-3.5" />
-                <span>PAYMENT_MODE = demo</span>
+                <span>100% FREE DEMO MODE</span>
               </div>
               <p>
-                This application runs in development demo mode. All entry references and QR scans simulate mock transactions. No actual financial credentials are stored or processed.
+                This open-source project is built purely for educational and portfolio demonstration purposes. All draws, entries, and QR scans are free mock simulations. No real money or payments are involved.
               </p>
             </div>
           </div>

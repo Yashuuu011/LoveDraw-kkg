@@ -58,9 +58,14 @@ export const Navbar: React.FC = () => {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? 'py-3 glass-panel shadow-2xl bg-plum-950/80 backdrop-blur-xl' : 'py-5 bg-transparent'
+        scrolled ? 'py-3 glass-panel shadow-2xl bg-plum-950/80 backdrop-blur-xl' : 'py-3 bg-plum-950/60 backdrop-blur-md'
       }`}
     >
+      {/* Educational Banner */}
+      <div className="bg-gradient-to-r from-plum-950 via-burgundy-900 to-plum-950 text-[11px] text-gold-300/90 py-1 px-4 text-center border-b border-rose-500/20 font-medium flex items-center justify-center gap-2 -mt-3 mb-2">
+        <Sparkles className="w-3 h-3 text-gold-400" />
+        <span>Educational Demo & Portfolio Project — All Draws & Payments are 100% Free Mock Simulations.</span>
+      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Brand Logo */}
