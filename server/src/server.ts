@@ -71,15 +71,22 @@ app.use((req, res) => {
 // Central Error Handler
 app.use(errorHandler);
 
-app.listen(PORT, async () => {
-  console.log(`
-  ======================================================
-  ❤️  LoveDraw Backend API Server Running  ❤️
-  ------------------------------------------------------
-  📡 Port: ${PORT}
-  🌍 Environment: ${process.env.NODE_ENV || 'development'}
-  💳 Payment Mode: ${process.env.PAYMENT_MODE || 'demo'} (MOCK/DEMO ONLY)
-  ======================================================
-  `);
-  await initDatabase();
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, async () => {
+    console.log(`
+    ======================================================
+    ❤️  LoveDraw Backend API Server Running  ❤️
+    ------------------------------------------------------
+    📡 Port: ${PORT}
+    🌍 Environment: ${process.env.NODE_ENV || 'development'}
+    💳 Payment Mode: ${process.env.PAYMENT_MODE || 'demo'} (MOCK/DEMO ONLY)
+    ======================================================
+    `);
+    await initDatabase();
+  });
+} else {
+  // Initialize database lazily on serverless runtimes
+  initDatabase().catch((err) => console.error('Database initialization warning on serverless:', err));
+}
+
+export default app;
