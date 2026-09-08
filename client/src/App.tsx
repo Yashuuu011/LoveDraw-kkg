@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
+import { ThemeProvider } from './context/ThemeContext';
 import FloatingHearts from './components/FloatingHearts';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -19,10 +20,11 @@ import AdminDashboard from './pages/AdminDashboard';
 
 export const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <ToastProvider>
-        <Router>
-          <div className="relative min-h-screen flex flex-col justify-between">
+    <ThemeProvider>
+      <AuthProvider>
+        <ToastProvider>
+          <Router>
+            <div className="relative min-h-screen flex flex-col justify-between">
             {/* Ambient Background Particles */}
             <FloatingHearts />
 
@@ -52,6 +54,7 @@ export const App: React.FC = () => {
         </Router>
       </ToastProvider>
     </AuthProvider>
+    </ThemeProvider>
   );
 };
 

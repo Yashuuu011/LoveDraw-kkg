@@ -22,6 +22,11 @@ export const register = async (req: Request, res: Response) => {
   try {
     const validated = registerSchema.parse(req.body);
 
+    const userCount = await prisma.user.count();
+    if (userCount >= 2) {
+      return res.status(403).json({ success: false, message: 'This private space is already occupied by the designated couple. Registration is closed.' });
+    }
+
     const existingUser = await prisma.user.findUnique({
       where: { email: validated.email }
     });

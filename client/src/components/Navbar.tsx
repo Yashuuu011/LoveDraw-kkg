@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Menu, X, User as UserIcon, LogOut, ShieldCheck, Sparkles, Gift } from 'lucide-react';
+import { Heart, Menu, X, User as UserIcon, LogOut, ShieldCheck, Sparkles, Gift, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
 export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -10,6 +11,7 @@ export const Navbar: React.FC = () => {
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -111,6 +113,14 @@ export const Navbar: React.FC = () => {
 
           {/* Desktop Right CTA / User Profile */}
           <div className="hidden md:flex items-center gap-4">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-full glass-card hover:bg-rose-500/10 transition-colors"
+              title="Toggle Theme"
+            >
+              {theme === 'dark' ? <Sun className="w-5 h-5 text-gold-300" /> : <Moon className="w-5 h-5 text-slate-600" />}
+            </button>
+
             {isAuthenticated && user ? (
               <div className="relative">
                 <button
@@ -189,8 +199,15 @@ export const Navbar: React.FC = () => {
             )}
           </div>
 
-          {/* Mobile Hamburger Button */}
+          {/* Mobile Theme & Hamburger Button */}
           <div className="md:hidden flex items-center gap-2">
+            <button
+              onClick={toggleTheme}
+              className="p-2.5 rounded-xl glass-card text-blush-200 hover:text-white"
+              title="Toggle Theme"
+            >
+              {theme === 'dark' ? <Sun className="w-5 h-5 text-gold-300" /> : <Moon className="w-5 h-5 text-slate-800" />}
+            </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2.5 rounded-xl glass-card text-blush-200 hover:text-white"

@@ -4,6 +4,7 @@ import { Heart, Sparkles, Filter, Bookmark, Calendar } from 'lucide-react';
 import api from '../services/api';
 import { DailyMessage } from '../types';
 import Envelope from '../components/Envelope';
+import PaymentQRModal from '../components/PaymentQRModal';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
@@ -29,6 +30,8 @@ export const DailyLove: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [favoritesMap, setFavoritesMap] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(true);
+  const [isPaymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [messageUnlocked, setMessageUnlocked] = useState(false);
 
   const { isAuthenticated } = useAuth();
   const { showToast } = useToast();
@@ -131,13 +134,41 @@ export const DailyLove: React.FC = () => {
       {/* Main Interactive Opening Envelope */}
       {todayMessage && (
         <div className="relative">
-          <Envelope
-            message={todayMessage}
-            onFavorite={handleFavoriteToggle}
-            isFavorited={Boolean(favoritesMap[todayMessage.id])}
-          />
+          {messageUnlocked ? (
+            <Envelope
+              message={todayMessage}
+              onFavorite={handleFavoriteToggle}
+              isFavorited={Boolean(favoritesMap[todayMessage.id])}
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center p-12 glass-panel rounded-3xl border border-rose-400/30 shadow-2xl max-w-lg mx-auto text-center space-y-6">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-rose-400 to-burgundy-500 flex items-center justify-center shadow-lg">
+                <Heart className="w-8 h-8 text-white fill-white animate-pulse" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-serif font-bold text-white mb-2">Today's Note is Locked</h3>
+                <p className="text-sm text-blush-200">Unlock your special romantic message for today for just ₹1.</p>
+              </div>
+              <button
+                onClick={() => setPaymentModalOpen(true)}
+                className="px-8 py-3.5 rounded-full bg-gradient-to-r from-rose-500 to-gold-500 text-white font-bold shadow-xl shadow-rose-900/40 hover:scale-105 transition-transform flex items-center gap-2"
+              >
+                <Sparkles className="w-5 h-5 text-gold-200" />
+                Pay ₹1 to Unlock
+              </button>
+            </div>
+          )}
         </div>
       )}
+
+      <PaymentQRModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setPaymentModalOpen(false)}
+        title="Today's Special Love Note"
+        price={1}
+        type="message"
+        onSuccess={() => setMessageUnlocked(true)}
+      />
 
       {/* Category Filter Chips & Archive Explorer */}
       <div className="space-y-8 pt-8 border-t border-rose-500/20">

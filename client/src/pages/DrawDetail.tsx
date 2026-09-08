@@ -4,7 +4,7 @@ import { Sparkles, Calendar, Users, Gift, ShieldCheck, CheckCircle2, QrCode, Arr
 import api from '../services/api';
 import { Draw, Entry } from '../types';
 import CountdownTimer from '../components/CountdownTimer';
-import DemoQRModal from '../components/DemoQRModal';
+import PaymentQRModal from '../components/PaymentQRModal';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
@@ -208,13 +208,14 @@ export const DrawDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* Demo QR Modal */}
+      {/* Payment QR Modal */}
       {entry && (
-        <DemoQRModal
+        <PaymentQRModal
           isOpen={isQrModalOpen}
           onClose={() => setIsQrModalOpen(false)}
-          draw={draw}
-          entry={entry}
+          title={draw.title}
+          price={draw.entryPriceINR}
+          type="draw"
           onSuccess={fetchDrawDetail}
         />
       )}
