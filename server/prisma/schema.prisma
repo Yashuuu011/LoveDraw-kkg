@@ -10,14 +10,19 @@ generator client {
 model User {
   id           String            @id @default(uuid())
   name         String
-  email        String            @unique
-  passwordHash String
+  email        String?           @unique
+  phone        String?           @unique
+  passwordHash String?
+  otpCode      String?
+  otpExpiresAt DateTime?
   avatarUrl    String?
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
   entries      Entry[]
   winners      Winner[]
   favorites    FavoriteMessage[]
+  sentMessages ChatMessage[]     @relation("SentMessages")
+  chatRooms    ChatParticipant[]
 }
 
 model Admin {
@@ -115,4 +120,35 @@ model AuditLog {
   performedAt DateTime @default(now())
   metadata    String?
   draw        Draw?    @relation(fields: [drawId], references: [id], onDelete: SetNull)
+}
+
+model ChatRoom {
+  id           String            @id @default(uuid())
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  participants ChatParticipant[]
+  messages     ChatMessage[]
+}
+
+model ChatParticipant {
+  id         String   @id @default(uuid())
+  chatRoomId String
+  userId     String
+  joinedAt   DateTime @default(now())
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([chatRoomId, userId])
+}
+
+model ChatMessage {
+  id         String   @id @default(uuid())
+  chatRoomId String
+  senderId   String
+  content    String? // Text content
+  mediaUrl   String? // Base64 or URL for image/video/audio
+  mediaType  String? // IMAGE, VIDEO, AUDIO
+  createdAt  DateTime @default(now())
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
 }

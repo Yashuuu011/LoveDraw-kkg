@@ -10,13 +10,14 @@ import Footer from './components/Footer';
 // Pages
 import Home from './pages/Home';
 import DailyLove from './pages/DailyLove';
-import Draws from './pages/Draws';
+import DrawsList from './pages/DrawsList';
 import DrawDetail from './pages/DrawDetail';
-import WinnerReveal from './pages/WinnerReveal';
+import DrawWinner from './pages/DrawWinner';
 import Memories from './pages/Memories';
-import Profile from './pages/Profile';
 import Auth from './pages/Auth';
 import AdminDashboard from './pages/AdminDashboard';
+import Chat from './pages/Chat';
+import ProtectedRoute from './components/ProtectedRoute';
 
 export const App: React.FC = () => {
   return (
@@ -36,11 +37,11 @@ export const App: React.FC = () => {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/daily-love" element={<DailyLove />} />
-                <Route path="/draws" element={<Draws />} />
+                <Route path="/draws" element={<DrawsList />} />
                 <Route path="/draw/:id" element={<DrawDetail />} />
-                <Route path="/draw/:id/winner" element={<WinnerReveal />} />
+                <Route path="/draw/:id/winner" element={<DrawWinner />} />
                 <Route path="/memories" element={<Memories />} />
-                <Route path="/profile" element={<Profile />} />
+                <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
                 <Route path="/login" element={<Auth />} />
                 <Route path="/register" element={<Auth />} />
                 <Route path="/forgot-password" element={<Auth />} />

@@ -11,6 +11,7 @@ import paymentRoutes from './routes/paymentRoutes';
 import winnerRoutes from './routes/winnerRoutes';
 import memoryRoutes from './routes/memoryRoutes';
 import adminRoutes from './routes/adminRoutes';
+import chatRoutes from './routes/chatRoutes';
 import { errorHandler } from './middleware/errorHandler';
 import { initDatabase } from './utils/initDb';
 
@@ -69,6 +70,7 @@ app.use('/api/payment', paymentRoutes);
 app.use('/api/winners', winnerRoutes);
 app.use('/api/memories', memoryRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Serve Frontend Client Static Dist in Unified Railway/Monorepo Deployment
 const clientDistPath = path.resolve(__dirname, '../../client/dist');
