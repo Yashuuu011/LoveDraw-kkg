@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+import path from 'path';
+import fs from 'fs';
 import authRoutes from './routes/authRoutes';
 import messageRoutes from './routes/messageRoutes';
 import drawRoutes from './routes/drawRoutes';
@@ -60,13 +62,25 @@ app.use('/api/winners', winnerRoutes);
 app.use('/api/memories', memoryRoutes);
 app.use('/api/admin', adminRoutes);
 
-// 404 Route Handler
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Endpoint not found. Love is everywhere, but not at this URL. 💕'
+// Serve Frontend Client Static Dist in Unified Railway/Monorepo Deployment
+const clientDistPath = path.resolve(__dirname, '../../client/dist');
+if (fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) {
+      return next();
+    }
+    res.sendFile(path.resolve(clientDistPath, 'index.html'));
   });
-});
+} else {
+  // 404 Route Handler when backend is deployed as a standalone API
+  app.use((req, res) => {
+    res.status(404).json({
+      success: false,
+      message: 'Endpoint not found. Love is everywhere, but not at this URL. 💕'
+    });
+  });
+}
 
 // Central Error Handler
 app.use(errorHandler);
