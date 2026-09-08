@@ -17,7 +17,11 @@ import { initDatabase } from './utils/initDb';
 dotenv.config();
 
 if (!process.env.DATABASE_URL) {
-  process.env.DATABASE_URL = "file:./prod.db";
+  if (process.env.VERCEL) {
+    process.env.DATABASE_URL = "file:/tmp/prod.db";
+  } else {
+    process.env.DATABASE_URL = "file:./prod.db";
+  }
 }
 
 const app = express();

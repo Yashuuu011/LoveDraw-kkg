@@ -9,11 +9,15 @@ export async function initDatabase() {
   } catch (error) {
     console.log('📦 Database not initialized or tables missing. Running database setup...');
     try {
-      const serverDir = path.resolve(__dirname, '../..');
-      execSync('npx prisma db push --accept-data-loss', { cwd: serverDir, stdio: 'inherit' });
-      console.log('🌱 Seeding database with initial love notes, demo users, and draws...');
-      execSync('npx ts-node src/seed/seed.ts', { cwd: serverDir, stdio: 'inherit' });
-      console.log('✅ Auto database setup & seed completed!');
+      if (!process.env.VERCEL) {
+        const serverDir = path.resolve(__dirname, '../..');
+        execSync('npx prisma db push --accept-data-loss', { cwd: serverDir, stdio: 'inherit' });
+        console.log('🌱 Seeding database with initial love notes, demo users, and draws...');
+        execSync('npx ts-node src/seed/seed.ts', { cwd: serverDir, stdio: 'inherit' });
+        console.log('✅ Auto database setup & seed completed!');
+      } else {
+        console.log('⚠️ Skipping auto database setup on Vercel. SQLite is read-only and ephemeral here.');
+      }
     } catch (cmdErr) {
       console.error('⚠️ Auto database setup warning:', cmdErr);
     }
