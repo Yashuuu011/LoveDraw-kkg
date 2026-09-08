@@ -1,0 +1,22 @@
+# Node dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# SQLite Database files
+prisma/*.db
+prisma/*.db-journal
+*.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS metadata
+.DS_Store
