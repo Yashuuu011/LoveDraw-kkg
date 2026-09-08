@@ -177,7 +177,7 @@ export const Envelope: React.FC<EnvelopeProps> = ({ message, onFavorite, isFavor
             <p className="text-sm font-serif italic text-rose-300">
               "Come back tomorrow for another little reminder of love. 💕"
             </p>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
