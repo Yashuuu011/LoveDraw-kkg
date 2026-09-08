@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-plum-950 text-blush-100 font-sans selection:bg-rose-500 selection:text-white antialiased overflow-x-hidden min-h-screen;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(74, 14, 23, 0.4) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(45, 11, 30, 0.5) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, rgba(59, 9, 16, 0.4) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+}
+
+/* Custom Romantic Glassmorphism Classes */
+.glass-panel {
+  background: rgba(45, 11, 30, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(232, 122, 144, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-card {
+  background: rgba(59, 9, 16, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(244, 165, 181, 0.15);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  border-color: rgba(232, 122, 144, 0.4);
+  box-shadow: 0 12px 30px -10px rgba(232, 122, 144, 0.3), 0 0 20px rgba(212, 175, 55, 0.15);
+  transform: translateY(-4px);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #FFF0F2 0%, #F5E6AB 50%, #D4AF37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.rose-gradient-text {
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFB7C5 50%, #E87A90 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Envelope 3D Animation Styles */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1D0517;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #62121F;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #E87A90;
+}
