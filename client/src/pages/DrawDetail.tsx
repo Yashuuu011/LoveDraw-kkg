@@ -70,7 +70,7 @@ export const DrawDetail: React.FC = () => {
   if (loading) {
     return (
       <div className="pt-32 pb-20 text-center">
-        <p className="text-rose-300 font-serif italic text-lg animate-pulse">
+        <p className="text-rose-500 dark:text-rose-300 font-serif italic text-lg animate-pulse">
           Sending a little love your way... 💕
         </p>
       </div>
@@ -80,9 +80,9 @@ export const DrawDetail: React.FC = () => {
   if (!draw) {
     return (
       <div className="pt-32 pb-20 max-w-md mx-auto text-center px-4">
-        <div className="glass-card rounded-3xl p-8 space-y-4">
-          <p className="text-xl font-serif text-white">Draw not found. ❤️</p>
-          <Link to="/draws" className="text-sm font-semibold text-rose-300 hover:text-white">
+        <div className="bg-white/80 dark:glass-card rounded-3xl p-8 space-y-4 border border-slate-200 dark:border-rose-400/20 shadow-md">
+          <p className="text-xl font-serif text-slate-800 dark:text-white">Draw not found. ❤️</p>
+          <Link to="/draws" className="text-sm font-semibold text-rose-500 hover:text-rose-600 dark:text-rose-300 dark:hover:text-white">
             Return to Draws List
           </Link>
         </div>
@@ -97,10 +97,10 @@ export const DrawDetail: React.FC = () => {
       {/* Back button */}
       <Link
         to="/draws"
-        className="inline-flex items-center gap-2 text-sm text-blush-200 hover:text-white transition-colors"
+        className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-800 dark:text-blush-200 dark:hover:text-white transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        <span>Back to All Draws</span>
+        Back to all draws
       </Link>
 
       {/* Main Grid Showcase */}
@@ -123,15 +123,26 @@ export const DrawDetail: React.FC = () => {
           </div>
 
           {/* About Section */}
-          <div className="glass-panel rounded-3xl p-8 border border-rose-400/20 space-y-4">
-            <h3 className="font-serif text-2xl font-bold text-white flex items-center gap-2">
-              <Gift className="w-5 h-5 text-gold-400" />
+          <div className="bg-white/50 dark:bg-plum-950/40 backdrop-blur-sm rounded-3xl p-8 border border-slate-200 dark:border-rose-400/20 space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 rounded-2xl bg-white/80 dark:glass-card border border-slate-200 dark:border-rose-400/20 flex flex-col gap-1 shadow-sm">
+                  <span className="text-xs text-gold-500 dark:text-gold-300 uppercase tracking-widest font-semibold flex items-center gap-1.5">
+                    <Users className="w-3.5 h-3.5" />
+                    Max Entries
+                  </span>
+                  <span className="font-serif font-bold text-slate-900 dark:text-white">
+                    {draw.maxEntries}
+                  </span>
+                </div>
+            </div>
+            <h3 className="font-serif text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <Gift className="w-5 h-5 text-gold-500 dark:text-gold-400" />
               About the Prize
             </h3>
-            <p className="text-sm text-blush-200 leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-blush-200 leading-relaxed">
               {draw.prizeDescription}
             </p>
-            <p className="text-sm text-blush-200/90 leading-relaxed pt-2 border-t border-rose-500/20">
+            <p className="text-sm text-slate-500 dark:text-blush-200/90 leading-relaxed pt-2 border-t border-slate-200 dark:border-rose-500/20">
               {draw.description}
             </p>
           </div>
@@ -139,35 +150,40 @@ export const DrawDetail: React.FC = () => {
 
         {/* Right Column: Draw Info, Countdown & Action */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="glass-panel rounded-3xl p-8 border border-rose-400/30 shadow-2xl space-y-6">
-            <div>
-              <div className="flex items-center gap-2 text-xs text-rose-300 font-medium mb-1">
-                <Users className="w-4 h-4 text-rose-400" />
-                <span>{draw.participantsCount || 0} Couples Participated</span>
+          <div className="bg-white dark:glass-panel rounded-3xl p-8 border border-slate-200 dark:border-rose-400/30 shadow-2xl space-y-6">
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-50 dark:bg-rose-500/20 text-rose-600 dark:text-rose-300 text-xs font-semibold border border-rose-200 dark:border-rose-400/30">
+                <Sparkles className="w-4 h-4 text-gold-500 dark:text-gold-400" />
+                <span>{isCompleted ? 'Completed Draw' : 'Active Draw'}</span>
               </div>
-              <h1 className="font-serif text-3xl font-extrabold text-white">{draw.title}</h1>
+
+              <h1 className="font-serif text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white">
+                {draw.title}
+              </h1>
             </div>
 
             {/* Countdown Box */}
-            <div className="p-4 rounded-2xl glass-card border border-rose-400/20 text-center space-y-3">
-              <p className="text-xs text-gold-300 font-semibold uppercase tracking-wider">
-                {isCompleted ? 'Draw Completed' : 'Time Remaining'}
+            <div className="p-6 rounded-3xl bg-white/80 dark:glass-panel border border-slate-200 dark:border-rose-400/30 text-center space-y-4 shadow-md">
+              <p className="text-xs text-rose-500 dark:text-rose-300 font-semibold uppercase tracking-wider">
+                Time Remaining
               </p>
               <CountdownTimer targetDate={draw.endDate} />
             </div>
 
             {/* Price & Demo Mode Info */}
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-plum-900/80 border border-rose-400/20">
+            <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-plum-900/80 border border-slate-200 dark:border-rose-400/20">
               <div>
-                <p className="text-[10px] text-blush-300 uppercase font-semibold">Participation Fee</p>
-                <p className="text-xl font-bold text-gold-300">₹{draw.entryPriceINR}</p>
+                <p className="text-[10px] text-slate-500 dark:text-blush-300 uppercase font-semibold">End Date</p>
+                <span className="font-serif font-bold text-slate-900 dark:text-white">
+                {new Date(draw.endDate).toLocaleDateString()}
+                </span>
               </div>
 
               <div className="text-right">
-                <span className="text-[10px] font-bold text-emerald-400 uppercase bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-400/20">
+                <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase bg-emerald-100 dark:bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-400/20">
                   DEMO MODE
                 </span>
-                <p className="text-[10px] text-blush-300 mt-1">No Real Money Charged</p>
+                <p className="text-[10px] text-slate-400 dark:text-blush-300 mt-1">No Real Money Charged</p>
               </div>
             </div>
 
@@ -175,24 +191,30 @@ export const DrawDetail: React.FC = () => {
             {isCompleted ? (
               <Link
                 to={`/draw/${draw.id}/winner`}
-                className="w-full py-4 rounded-full bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-burgundy-950 font-bold text-base shadow-xl flex items-center justify-center gap-2 transition-all"
+                className="w-full py-4 rounded-full bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-white font-bold text-base shadow-xl flex items-center justify-center gap-2 transition-all"
               >
                 <Sparkles className="w-5 h-5" />
                 <span>View Winner Reveal 🎉</span>
               </Link>
             ) : entry ? (
-              <button
-                onClick={() => setIsQrModalOpen(true)}
-                className="w-full py-4 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold text-base shadow-xl flex items-center justify-center gap-2.5 transition-all"
-              >
-                <QrCode className="w-5 h-5" />
-                <span>View My Demo Entry & QR Code</span>
-              </button>
+                <div className="space-y-3">
+                  <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-400/20 text-emerald-700 dark:text-emerald-300 text-sm font-semibold flex items-center justify-center gap-2">
+                    <CheckCircle2 className="w-5 h-5" />
+                    Your entry is confirmed. Good luck!
+                  </div>
+                  <button
+                    onClick={() => setIsQrModalOpen(true)}
+                    className="w-full py-4 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-base shadow-xl flex items-center justify-center gap-2.5 transition-all"
+                  >
+                    <QrCode className="w-5 h-5" />
+                    <span>View QR Code</span>
+                  </button>
+                </div>
             ) : (
               <button
                 onClick={handleJoinDraw}
                 disabled={submitting}
-                className="w-full py-4 rounded-full bg-gradient-to-r from-rose-500 via-rose-600 to-burgundy-600 hover:from-rose-400 hover:to-burgundy-500 text-white font-bold text-base shadow-xl shadow-rose-900/50 flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 disabled:opacity-50"
+                className="w-full py-4 rounded-full bg-gradient-to-r from-rose-500 via-rose-600 to-burgundy-600 hover:from-rose-400 hover:to-burgundy-500 text-white font-bold text-base shadow-xl shadow-rose-900/20 flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 disabled:opacity-50"
               >
                 <Sparkles className="w-5 h-5 text-gold-300" />
                 <span>{submitting ? 'Generating Entry...' : `Join Draw — ₹${draw.entryPriceINR}`}</span>
@@ -200,8 +222,8 @@ export const DrawDetail: React.FC = () => {
             )}
 
             {/* Safety Guarantee */}
-            <div className="pt-2 text-center text-xs text-blush-300/80 flex items-center justify-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-gold-400" />
+            <div className="pt-2 text-center text-xs text-slate-400 dark:text-blush-300/80 flex items-center justify-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-gold-500 dark:text-gold-400" />
               <span>Safe server-side random draw mechanism</span>
             </div>
           </div>

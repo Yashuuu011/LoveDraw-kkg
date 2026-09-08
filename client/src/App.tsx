@@ -10,9 +10,9 @@ import Footer from './components/Footer';
 // Pages
 import Home from './pages/Home';
 import DailyLove from './pages/DailyLove';
-import DrawsList from './pages/DrawsList';
+import Draws from './pages/Draws';
 import DrawDetail from './pages/DrawDetail';
-import DrawWinner from './pages/DrawWinner';
+import WinnerReveal from './pages/WinnerReveal';
 import Memories from './pages/Memories';
 import Auth from './pages/Auth';
 import AdminDashboard from './pages/AdminDashboard';
@@ -37,9 +37,9 @@ export const App: React.FC = () => {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/daily-love" element={<DailyLove />} />
-                <Route path="/draws" element={<DrawsList />} />
+                <Route path="/draws" element={<Draws />} />
                 <Route path="/draw/:id" element={<DrawDetail />} />
-                <Route path="/draw/:id/winner" element={<DrawWinner />} />
+                <Route path="/draw/:id/winner" element={<WinnerReveal />} />
                 <Route path="/memories" element={<Memories />} />
                 <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
                 <Route path="/login" element={<Auth />} />

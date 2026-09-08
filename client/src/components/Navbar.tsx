@@ -61,14 +61,9 @@ export const Navbar: React.FC = () => {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? 'py-3 glass-panel shadow-2xl bg-plum-950/80 backdrop-blur-xl' : 'py-3 bg-plum-950/60 backdrop-blur-md'
+        scrolled ? 'py-3 glass-panel shadow-2xl backdrop-blur-xl' : 'py-3 bg-white/70 dark:bg-plum-950/60 backdrop-blur-md'
       }`}
     >
-      {/* Educational Banner */}
-      <div className="bg-gradient-to-r from-plum-950 via-burgundy-900 to-plum-950 text-[11px] text-gold-300/90 py-1 px-4 text-center border-b border-rose-500/20 font-medium flex items-center justify-center gap-2 -mt-3 mb-2">
-        <Sparkles className="w-3 h-3 text-gold-400" />
-        <span>Educational Demo & Portfolio Project — All Draws & Payments are 100% Free Mock Simulations.</span>
-      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Brand Logo */}
@@ -97,8 +92,8 @@ export const Navbar: React.FC = () => {
                 <button
                   key={link.name}
                   onClick={() => handleNavClick(link.path)}
-                  className={`relative text-sm font-medium transition-colors hover:text-rose-300 ${
-                    isActive ? 'text-rose-400 font-semibold' : 'text-blush-200'
+                  className={`relative text-sm font-medium transition-colors text-slate-600 hover:text-rose-500 dark:text-blush-200 dark:hover:text-rose-300 ${
+                    isActive ? 'text-rose-500 dark:text-rose-400 font-semibold' : ''
                   }`}
                 >
                   {link.name}
@@ -134,7 +129,7 @@ export const Navbar: React.FC = () => {
                     alt={user.name}
                     className="w-8 h-8 rounded-full border border-rose-400/30 object-cover"
                   />
-                  <span className="text-sm font-medium text-blush-100 max-w-[100px] truncate">
+                  <span className="text-sm font-medium text-slate-700 dark:text-blush-100 max-w-[100px] truncate">
                     {user.name}
                   </span>
                 </button>
@@ -150,12 +145,12 @@ export const Navbar: React.FC = () => {
                     >
                       <div className="px-3 py-2 border-b border-rose-500/20">
                         <p className="text-xs text-rose-300 font-medium">Signed in as</p>
-                        <p className="text-sm font-semibold text-white truncate">{user.email}</p>
+                        <p className="text-sm font-semibold text-slate-800 dark:text-white truncate">{user.email}</p>
                       </div>
 
                       <Link
                         to="/profile"
-                        className="flex items-center gap-2.5 px-3 py-2.5 text-sm text-blush-100 hover:bg-rose-500/20 rounded-xl transition-colors mt-1"
+                        className="flex items-center gap-2.5 px-3 py-2.5 text-sm text-slate-700 dark:text-blush-100 hover:bg-rose-500/10 dark:hover:bg-rose-500/20 rounded-xl transition-colors mt-1"
                       >
                         <UserIcon className="w-4 h-4 text-rose-400" />
                         My Profile & History
@@ -186,7 +181,7 @@ export const Navbar: React.FC = () => {
               <div className="flex items-center gap-3">
                 <Link
                   to="/login"
-                  className="px-4 py-2 text-sm font-medium text-blush-200 hover:text-white transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-blush-200 dark:hover:text-white transition-colors"
                 >
                   Log In
                 </Link>
@@ -205,14 +200,14 @@ export const Navbar: React.FC = () => {
           <div className="md:hidden flex items-center gap-2">
             <button
               onClick={toggleTheme}
-              className="p-2.5 rounded-xl glass-card text-blush-200 hover:text-white"
+              className="p-2.5 rounded-xl glass-card text-slate-700 dark:text-blush-200 hover:text-slate-900 dark:hover:text-white"
               title="Toggle Theme"
             >
               {theme === 'dark' ? <Sun className="w-5 h-5 text-gold-300" /> : <Moon className="w-5 h-5 text-slate-800" />}
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 rounded-xl glass-card text-blush-200 hover:text-white"
+              className="p-2.5 rounded-xl glass-card text-slate-700 dark:text-blush-200 hover:text-slate-900 dark:hover:text-white"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -235,7 +230,7 @@ export const Navbar: React.FC = () => {
                 <button
                   key={link.name}
                   onClick={() => handleNavClick(link.path)}
-                  className="w-full text-left px-4 py-3 rounded-xl text-base font-medium text-blush-100 hover:bg-rose-500/20 transition-colors flex items-center justify-between"
+                  className="w-full text-left px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:bg-rose-50 dark:text-blush-100 dark:hover:bg-rose-500/20 transition-colors flex items-center justify-between"
                 >
                   {link.name}
                   <Heart className="w-4 h-4 text-rose-400/40" />
@@ -273,7 +268,7 @@ export const Navbar: React.FC = () => {
                   <div className="grid grid-cols-2 gap-3 pt-2">
                     <Link
                       to="/login"
-                      className="w-full py-3 text-center rounded-xl glass-card text-blush-100 font-medium"
+                      className="w-full py-3 text-center rounded-xl glass-card text-slate-700 dark:text-blush-100 font-medium"
                     >
                       Log In
                     </Link>

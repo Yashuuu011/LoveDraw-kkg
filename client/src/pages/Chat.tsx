@@ -28,6 +28,7 @@ interface ChatRoom {
 
 export const Chat: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedRoom, setSelectedRoom] = useState<ChatRoom | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -37,16 +38,20 @@ export const Chat: React.FC = () => {
   const { user } = useAuth();
   const { showToast } = useToast();
   const { theme } = useTheme();
-  const isDark = theme === 'dark';
-  
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    fetchUsers();
-    return () => stopPolling();
-  }, []);
+    const delayDebounceFn = setTimeout(() => {
+      fetchUsers(searchQuery);
+    }, 500);
+
+    return () => {
+      clearTimeout(delayDebounceFn);
+      stopPolling();
+    };
+  }, [searchQuery]);
 
   useEffect(() => {
     if (selectedRoom) {
@@ -61,9 +66,9 @@ export const Chat: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (query = '') => {
     try {
-      const res = await api.get('/chat/users');
+      const res = await api.get(`/chat/users${query ? `?search=${encodeURIComponent(query)}` : ''}`);
       if (res.data.success) {
         setUsers(res.data.data);
       }
@@ -160,27 +165,30 @@ export const Chat: React.FC = () => {
 
   return (
     <div className="pt-24 pb-8 max-w-6xl mx-auto px-4 h-screen flex flex-col">
-      <div className={`flex-1 flex overflow-hidden rounded-3xl shadow-2xl ${
-        isDark ? 'glass-panel border border-rose-400/30' : 'bg-white border border-rose-200'
-      }`}>
+      <div className="flex-1 flex overflow-hidden rounded-3xl shadow-2xl bg-white border-rose-200 dark:glass-panel dark:border-rose-400/30">
         
         {/* Sidebar - Users */}
-        <div className={`w-1/3 border-r flex flex-col ${isDark ? 'border-rose-400/30' : 'border-rose-100'}`}>
-          <div className={`p-4 border-b ${isDark ? 'border-rose-400/30' : 'border-rose-100'}`}>
-            <h2 className={`font-serif text-xl font-bold ${isDark ? 'text-white' : 'text-slate-800'}`}>
+        <div className="w-1/3 border-r flex flex-col border-rose-100 dark:border-rose-400/30">
+          <div className="p-4 border-b border-rose-100 dark:border-rose-400/30 space-y-4">
+            <h2 className="font-serif text-xl font-bold text-slate-800 dark:text-white">
               Conversations
             </h2>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search by phone number or name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-2 text-sm rounded-full bg-slate-100 dark:bg-plum-900/50 border border-slate-200 dark:border-rose-400/20 text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-400/50"
+              />
+            </div>
           </div>
           <div className="flex-1 overflow-y-auto p-2 space-y-2">
             {users.map(u => (
               <button
                 key={u.id}
                 onClick={() => startChat(u.id)}
-                className={`w-full flex items-center gap-3 p-3 rounded-2xl transition-all ${
-                  isDark 
-                    ? 'hover:bg-rose-500/10 text-white' 
-                    : 'hover:bg-rose-50 text-slate-700'
-                }`}
+                className="w-full flex items-center gap-3 p-3 rounded-2xl transition-all hover:bg-rose-50 text-slate-700 dark:hover:bg-rose-500/10 dark:text-white"
               >
                 <img src={u.avatarUrl} alt={u.name} className="w-10 h-10 rounded-full bg-slate-200" />
                 <span className="font-medium text-sm">{u.name}</span>
@@ -197,9 +205,9 @@ export const Chat: React.FC = () => {
           {selectedRoom ? (
             <>
               {/* Chat Header */}
-              <div className={`p-4 border-b flex items-center gap-3 ${isDark ? 'border-rose-400/30 bg-plum-900/50' : 'border-rose-100 bg-rose-50'}`}>
+              <div className="p-4 border-b flex items-center gap-3 border-rose-100 bg-rose-50 dark:border-rose-400/30 dark:bg-plum-900/50">
                 <img src={getPartner(selectedRoom)?.avatarUrl} alt="Partner" className="w-10 h-10 rounded-full bg-white" />
-                <h3 className={`font-serif font-bold ${isDark ? 'text-white' : 'text-slate-800'}`}>
+                <h3 className="font-serif font-bold text-slate-800 dark:text-white">
                   {getPartner(selectedRoom)?.name}
                 </h3>
               </div>
@@ -213,7 +221,7 @@ export const Chat: React.FC = () => {
                       <div className={`max-w-[70%] rounded-2xl p-3 ${
                         isMe 
                           ? 'bg-rose-500 text-white rounded-tr-sm' 
-                          : isDark ? 'bg-plum-800 text-white rounded-tl-sm' : 'bg-slate-100 text-slate-800 rounded-tl-sm'
+                          : 'bg-slate-100 text-slate-800 rounded-tl-sm dark:bg-plum-800 dark:text-white'
                       }`}>
                         {msg.mediaUrl && (
                           <div className="mb-2 rounded-xl overflow-hidden">
@@ -235,7 +243,7 @@ export const Chat: React.FC = () => {
 
               {/* Attachment Preview */}
               {attachment && (
-                <div className={`p-3 border-t ${isDark ? 'border-rose-400/30 bg-plum-900/80' : 'border-rose-100 bg-white'}`}>
+                <div className="p-3 border-t border-rose-100 bg-white dark:border-rose-400/30 dark:bg-plum-900/80">
                   <div className="relative inline-block">
                     {attachment.type === 'IMAGE' && <img src={attachment.url} alt="Preview" className="h-20 rounded-lg" />}
                     {attachment.type === 'VIDEO' && <video src={attachment.url} className="h-20 rounded-lg" />}
@@ -248,7 +256,7 @@ export const Chat: React.FC = () => {
               )}
 
               {/* Input Area */}
-              <form onSubmit={sendMessage} className={`p-3 border-t flex items-end gap-2 ${isDark ? 'border-rose-400/30 bg-plum-900/50' : 'border-rose-100 bg-rose-50'}`}>
+              <form onSubmit={sendMessage} className="p-3 border-t flex items-end gap-2 border-rose-100 bg-rose-50 dark:border-rose-400/30 dark:bg-plum-900/50">
                 <input 
                   type="file" 
                   ref={fileInputRef} 
@@ -259,7 +267,7 @@ export const Chat: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className={`p-3 rounded-full transition-colors ${isDark ? 'bg-plum-800 text-rose-300 hover:bg-plum-700' : 'bg-white text-rose-500 hover:bg-slate-100 shadow-sm'}`}
+                  className="p-3 rounded-full transition-colors bg-white text-rose-500 hover:bg-slate-100 shadow-sm dark:bg-plum-800 dark:text-rose-300 dark:hover:bg-plum-700"
                 >
                   <Paperclip className="w-5 h-5" />
                 </button>
@@ -267,9 +275,7 @@ export const Chat: React.FC = () => {
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder="Type a message..."
-                  className={`flex-1 rounded-2xl px-4 py-3 min-h-[44px] max-h-32 resize-none focus:outline-none ${
-                    isDark ? 'bg-plum-800 text-white placeholder-blush-300/50' : 'bg-white border border-rose-200 text-slate-800'
-                  }`}
+                  className="flex-1 rounded-2xl px-4 py-3 min-h-[44px] max-h-32 resize-none focus:outline-none bg-white border border-rose-200 text-slate-800 dark:bg-plum-800 dark:text-white dark:placeholder-blush-300/50"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
@@ -291,8 +297,8 @@ export const Chat: React.FC = () => {
               <div className="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center mb-4">
                 <Heart className="w-10 h-10 text-rose-500 fill-rose-500 opacity-50" />
               </div>
-              <h3 className={`text-xl font-serif font-bold ${isDark ? 'text-white' : 'text-slate-700'}`}>Your Private Space</h3>
-              <p className={`text-sm mt-2 max-w-sm ${isDark ? 'text-blush-200' : 'text-slate-500'}`}>
+              <h3 className="text-xl font-serif font-bold text-slate-700 dark:text-white">Your Private Space</h3>
+              <p className="text-sm mt-2 max-w-sm text-slate-500 dark:text-blush-200">
                 Select a user from the sidebar to start sharing memories, photos, videos, and sweet messages securely.
               </p>
             </div>

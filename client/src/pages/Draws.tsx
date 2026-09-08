@@ -35,22 +35,22 @@ export const Draws: React.FC = () => {
     <div className="pt-28 pb-20 max-w-6xl mx-auto px-4 space-y-12">
       {/* Page Title */}
       <div className="text-center space-y-3">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-rose-400/30 text-gold-300 text-xs font-semibold">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 dark:glass-panel border border-slate-200 dark:border-rose-400/30 text-gold-500 dark:text-gold-300 text-xs font-semibold shadow-sm">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Weekly & Monthly Prize Draws</span>
         </div>
 
-        <h1 className="font-serif text-4xl sm:text-5xl font-extrabold rose-gradient-text">
-          Romantic Love Draws ❤️
+        <h1 className="font-serif text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white">
+          Romantic <span className="text-rose-600 dark:rose-gradient-text">Love Draws</span> ❤️
         </h1>
-        <p className="text-base text-blush-200/90 max-w-xl mx-auto">
+        <p className="text-base text-slate-600 dark:text-blush-200/90 max-w-xl mx-auto">
           Participate in curated luxury couple photo packages, stargazing hampers, and romantic experiences.
         </p>
       </div>
 
       {/* Filter Tabs */}
       <div className="flex justify-center">
-        <div className="p-1.5 rounded-full glass-panel border border-rose-400/30 inline-flex gap-2">
+        <div className="p-1.5 rounded-full bg-white/80 dark:glass-panel border border-slate-200 dark:border-rose-400/30 inline-flex gap-2 shadow-sm">
           {(['ALL', 'ACTIVE', 'COMPLETED'] as const).map((tab) => (
             <button
               key={tab}
@@ -58,7 +58,7 @@ export const Draws: React.FC = () => {
               className={`px-6 py-2 rounded-full text-xs font-bold transition-all ${
                 filter === tab
                   ? 'bg-gradient-to-r from-rose-500 to-burgundy-600 text-white shadow-lg'
-                  : 'text-blush-200 hover:text-white'
+                  : 'text-slate-600 hover:text-slate-900 dark:text-blush-200 dark:hover:text-white'
               }`}
             >
               {tab === 'ALL' && 'All Draws'}
@@ -72,17 +72,17 @@ export const Draws: React.FC = () => {
       {/* Draws Grid */}
       {loading ? (
         <div className="text-center py-20">
-          <p className="text-rose-300 font-serif italic text-lg animate-pulse">
+          <p className="text-rose-500 dark:text-rose-300 font-serif italic text-lg animate-pulse">
             Sending a little love your way... 💕
           </p>
         </div>
       ) : draws.length === 0 ? (
-        <div className="text-center py-20 glass-card rounded-3xl p-10 border border-rose-400/20">
-          <Gift className="w-12 h-12 text-rose-400 mx-auto mb-4" />
-          <p className="text-lg font-serif text-white font-semibold">
+        <div className="text-center py-20 bg-white/80 dark:glass-card rounded-3xl p-10 border border-slate-200 dark:border-rose-400/20 shadow-md">
+          <Gift className="w-12 h-12 text-rose-500 dark:text-rose-400 mx-auto mb-4" />
+          <p className="text-lg font-serif text-slate-800 dark:text-white font-semibold">
             No draws available for this filter right now.
           </p>
-          <p className="text-sm text-blush-200 mt-1">Check back soon for new romantic draws! ❤️</p>
+          <p className="text-sm text-slate-600 dark:text-blush-200 mt-1">Check back soon for new romantic draws! ❤️</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

@@ -6,9 +6,20 @@ export const getUsers = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) return res.status(401).json({ success: false, message: 'Not authenticated.' });
     
+    const { search } = req.query;
+    let whereClause: any = { id: { not: req.user.id } };
+
+    if (search && typeof search === 'string') {
+      whereClause.OR = [
+        { phone: { contains: search } },
+        { name: { contains: search } }
+      ];
+    }
+
     const users = await prisma.user.findMany({
-      where: { id: { not: req.user.id } },
-      select: { id: true, name: true, email: true, phone: true, avatarUrl: true }
+      where: whereClause,
+      select: { id: true, name: true, email: true, phone: true, avatarUrl: true },
+      take: 20 // limit results for search
     });
     
     return res.json({ success: true, data: users });

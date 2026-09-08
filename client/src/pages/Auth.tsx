@@ -93,16 +93,14 @@ export const Auth: React.FC = () => {
     }
   };
 
-  const isDark = theme === 'dark';
+
 
   return (
     <div className="min-h-[85vh] pt-28 pb-20 flex items-center justify-center px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`w-full max-w-md rounded-3xl p-8 shadow-2xl space-y-6 ${
-          isDark ? 'glass-panel border border-rose-400/30' : 'bg-white border border-rose-200'
-        }`}
+        className="w-full max-w-md rounded-3xl p-8 shadow-2xl space-y-6 bg-white border-rose-200 dark:glass-panel dark:border-rose-400/30"
       >
         {/* Header */}
         <div className="text-center space-y-2">
@@ -112,12 +110,12 @@ export const Auth: React.FC = () => {
             </div>
           </div>
 
-          <h1 className={`font-serif text-3xl font-bold ${isDark ? 'rose-gradient-text' : 'text-rose-600'}`}>
+          <h1 className="font-serif text-3xl font-bold text-rose-600 dark:rose-gradient-text">
             {isRegister && 'Create Account ❤️'}
             {!isRegister && !isForgotPassword && 'Welcome Back ❤️'}
             {isForgotPassword && 'Reset Password 🔑'}
           </h1>
-          <p className={`text-xs ${isDark ? 'text-blush-200' : 'text-slate-500'}`}>
+          <p className="text-xs text-slate-500 dark:text-blush-200">
             {isRegister && 'Join the LoveDraw community today'}
             {!isRegister && !isForgotPassword && 'Log in to view draws and save love notes'}
             {isForgotPassword && 'Enter your email to receive a reset link'}
@@ -127,18 +125,18 @@ export const Auth: React.FC = () => {
         {/* Toggle Phone/Email Login */}
         {!isRegister && !isForgotPassword && (
           <div className="flex justify-center mb-4">
-            <div className={`flex rounded-full p-1 ${isDark ? 'bg-plum-900' : 'bg-slate-100'}`}>
+            <div className="flex rounded-full p-1 bg-slate-100 dark:bg-plum-900">
               <button
                 type="button"
                 onClick={() => { setUsePhone(false); setOtpSent(false); }}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${!usePhone ? 'bg-rose-500 text-white shadow' : (isDark ? 'text-blush-200' : 'text-slate-500')}`}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${!usePhone ? 'bg-rose-500 text-white shadow' : 'text-slate-500 dark:text-blush-200'}`}
               >
                 Use Email
               </button>
               <button
                 type="button"
                 onClick={() => setUsePhone(true)}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${usePhone ? 'bg-rose-500 text-white shadow' : (isDark ? 'text-blush-200' : 'text-slate-500')}`}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${usePhone ? 'bg-rose-500 text-white shadow' : 'text-slate-500 dark:text-blush-200'}`}
               >
                 Use Phone (OTP)
               </button>
@@ -150,7 +148,7 @@ export const Auth: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           {isRegister && (
             <div className="space-y-1">
-              <label className={`text-xs font-medium ${isDark ? 'text-blush-200' : 'text-slate-600'}`}>Your Name</label>
+              <label className="text-xs font-medium text-slate-600 dark:text-blush-200">Your Name</label>
               <div className="relative">
                 <UserIcon className="w-4 h-4 text-rose-400 absolute left-3.5 top-3.5" />
                 <input
@@ -159,11 +157,7 @@ export const Auth: React.FC = () => {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Sarah Jenkins"
-                  className={`w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 ${
-                    isDark 
-                      ? 'glass-card border-rose-400/30 text-white placeholder-blush-300/40' 
-                      : 'bg-rose-50/50 border-rose-200 text-slate-800 placeholder-slate-400'
-                  }`}
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 bg-rose-50/50 border-rose-200 text-slate-800 placeholder-slate-400 dark:glass-card dark:border-rose-400/30 dark:text-white dark:placeholder-blush-300/40"
                 />
               </div>
             </div>
@@ -171,7 +165,7 @@ export const Auth: React.FC = () => {
 
           {(!usePhone || isRegister || isForgotPassword) && (
             <div className="space-y-1">
-              <label className={`text-xs font-medium ${isDark ? 'text-blush-200' : 'text-slate-600'}`}>
+              <label className="text-xs font-medium text-slate-600 dark:text-blush-200">
                 {isRegister ? 'Email Address (Optional if using phone)' : 'Email Address'}
               </label>
               <div className="relative">
@@ -182,11 +176,7 @@ export const Auth: React.FC = () => {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="your.email@lovedraw.com"
-                  className={`w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 ${
-                    isDark 
-                      ? 'glass-card border-rose-400/30 text-white placeholder-blush-300/40' 
-                      : 'bg-rose-50/50 border-rose-200 text-slate-800 placeholder-slate-400'
-                  }`}
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 bg-rose-50/50 border-rose-200 text-slate-800 placeholder-slate-400 dark:glass-card dark:border-rose-400/30 dark:text-white dark:placeholder-blush-300/40"
                 />
               </div>
             </div>
@@ -194,7 +184,7 @@ export const Auth: React.FC = () => {
 
           {(usePhone || isRegister) && !isForgotPassword && (
             <div className="space-y-1">
-              <label className={`text-xs font-medium ${isDark ? 'text-blush-200' : 'text-slate-600'}`}>
+              <label className="text-xs font-medium text-slate-600 dark:text-blush-200">
                 Phone Number {isRegister && '(Optional if using email)'}
               </label>
               <div className="relative flex gap-2">
@@ -207,11 +197,7 @@ export const Auth: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="+919876543210"
                     disabled={otpSent}
-                    className={`w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 ${
-                      isDark 
-                        ? 'glass-card border-rose-400/30 text-white placeholder-blush-300/40' 
-                        : 'bg-rose-50/50 border-rose-200 text-slate-800 placeholder-slate-400'
-                    } ${otpSent ? 'opacity-50' : ''}`}
+                    className={`w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 bg-rose-50/50 border-rose-200 text-slate-800 placeholder-slate-400 dark:glass-card dark:border-rose-400/30 dark:text-white dark:placeholder-blush-300/40 ${otpSent ? 'opacity-50' : ''}`}
                   />
                 </div>
                 {!isRegister && usePhone && !otpSent && (
@@ -231,7 +217,7 @@ export const Auth: React.FC = () => {
           {/* OTP Input for Login */}
           {!isRegister && usePhone && otpSent && (
             <div className="space-y-1">
-              <label className={`text-xs font-medium ${isDark ? 'text-blush-200' : 'text-slate-600'}`}>Enter OTP</label>
+              <label className="text-xs font-medium text-slate-600 dark:text-blush-200">Enter OTP</label>
               <div className="relative">
                 <KeyRound className="w-4 h-4 text-rose-400 absolute left-3.5 top-3.5" />
                 <input
@@ -240,11 +226,7 @@ export const Auth: React.FC = () => {
                   value={formData.otp}
                   onChange={(e) => setFormData({ ...formData, otp: e.target.value })}
                   placeholder="123456"
-                  className={`w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 tracking-widest ${
-                    isDark 
-                      ? 'glass-card border-rose-400/30 text-white placeholder-blush-300/40' 
-                      : 'bg-rose-50/50 border-rose-200 text-slate-800 placeholder-slate-400'
-                  }`}
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 tracking-widest bg-rose-50/50 border-rose-200 text-slate-800 placeholder-slate-400 dark:glass-card dark:border-rose-400/30 dark:text-white dark:placeholder-blush-300/40"
                 />
               </div>
             </div>
@@ -254,7 +236,7 @@ export const Auth: React.FC = () => {
           {(!usePhone || isRegister) && !isForgotPassword && (
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <label className={`text-xs font-medium ${isDark ? 'text-blush-200' : 'text-slate-600'}`}>Password</label>
+                <label className="text-xs font-medium text-slate-600 dark:text-blush-200">Password</label>
                 {!isRegister && (
                   <Link to="/forgot-password" className="text-[11px] text-rose-500 hover:underline">
                     Forgot?
@@ -269,11 +251,7 @@ export const Auth: React.FC = () => {
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   placeholder="••••••••"
-                  className={`w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 ${
-                    isDark 
-                      ? 'glass-card border-rose-400/30 text-white placeholder-blush-300/40' 
-                      : 'bg-rose-50/50 border-rose-200 text-slate-800 placeholder-slate-400'
-                  }`}
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 bg-rose-50/50 border-rose-200 text-slate-800 placeholder-slate-400 dark:glass-card dark:border-rose-400/30 dark:text-white dark:placeholder-blush-300/40"
                 />
               </div>
             </div>
@@ -300,7 +278,7 @@ export const Auth: React.FC = () => {
         </form>
 
         {/* Footer Navigation Switcher */}
-        <div className={`text-center pt-2 text-xs ${isDark ? 'text-blush-300' : 'text-slate-500'}`}>
+        <div className="text-center pt-2 text-xs text-slate-500 dark:text-blush-300">
           {isRegister ? (
             <p>
               Already have an account?{' '}
