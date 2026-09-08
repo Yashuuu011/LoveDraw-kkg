@@ -16,6 +16,10 @@ import { initDatabase } from './utils/initDb';
 
 dotenv.config();
 
+if (!process.env.DATABASE_URL) {
+  process.env.DATABASE_URL = "file:./prod.db";
+}
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
