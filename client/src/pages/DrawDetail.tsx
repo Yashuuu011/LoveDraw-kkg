@@ -97,7 +97,7 @@ export const DrawDetail: React.FC = () => {
       {/* Back button */}
       <Link
         to="/draws"
-        className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-800 dark:text-blush-200 dark:hover:text-white transition-colors"
+        className="inline-flex items-center gap-2 text-sm text-slate-500 dark:text-slate-300 hover:text-slate-800 dark:text-white dark:hover:text-white transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to all draws
@@ -139,7 +139,7 @@ export const DrawDetail: React.FC = () => {
               <Gift className="w-5 h-5 text-gold-500 dark:text-gold-400" />
               About the Prize
             </h3>
-            <p className="text-sm text-slate-600 dark:text-blush-200 leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-slate-200 leading-relaxed">
               {draw.prizeDescription}
             </p>
             <p className="text-sm text-slate-500 dark:text-blush-200/90 leading-relaxed pt-2 border-t border-slate-200 dark:border-rose-500/20">
@@ -173,7 +173,7 @@ export const DrawDetail: React.FC = () => {
             {/* Price & Demo Mode Info */}
             <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-plum-900/80 border border-slate-200 dark:border-rose-400/20">
               <div>
-                <p className="text-[10px] text-slate-500 dark:text-blush-300 uppercase font-semibold">End Date</p>
+                <p className="text-[10px] text-slate-500 dark:text-slate-300 uppercase font-semibold">End Date</p>
                 <span className="font-serif font-bold text-slate-900 dark:text-white">
                 {new Date(draw.endDate).toLocaleDateString()}
                 </span>
@@ -204,7 +204,7 @@ export const DrawDetail: React.FC = () => {
                   </div>
                   <button
                     onClick={() => setIsQrModalOpen(true)}
-                    className="w-full py-4 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-base shadow-xl flex items-center justify-center gap-2.5 transition-all"
+                    className="w-full py-4 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 dark:text-white font-bold text-base shadow-xl flex items-center justify-center gap-2.5 transition-all"
                   >
                     <QrCode className="w-5 h-5" />
                     <span>View QR Code</span>

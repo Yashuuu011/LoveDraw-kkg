@@ -13,7 +13,7 @@
   }
   
   .dark body {
-    @apply bg-plum-950 text-blush-100;
+    @apply bg-plum-950 text-slate-50;
     background-image: 
       radial-gradient(at 0% 0%, rgba(74, 14, 23, 0.4) 0px, transparent 50%),
       radial-gradient(at 100% 0%, rgba(45, 11, 30, 0.5) 0px, transparent 50%),

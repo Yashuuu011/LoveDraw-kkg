@@ -124,7 +124,7 @@ export const DailyLove: React.FC = () => {
         <h1 className="font-serif text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white">
           Today's <span className="text-rose-600 dark:rose-gradient-text">Love Note</span> 💌
         </h1>
-        <p className="text-base text-slate-600 dark:text-blush-200">
+        <p className="text-base text-slate-600 dark:text-slate-200">
           Start your day with a beautiful romantic message. Tap the envelope to unseal it.
         </p>
       </div>
@@ -187,7 +187,7 @@ export const DailyLove: React.FC = () => {
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
                   selectedCategory === cat 
                     ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/25' 
-                    : 'bg-white/80 dark:glass-card text-slate-600 dark:text-blush-200 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-rose-400/20'
+                    : 'bg-white/80 dark:glass-card text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:text-white dark:hover:text-white border border-slate-200 dark:border-rose-400/20'
                 }`}
               >
                 {cat}
@@ -217,7 +217,7 @@ export const DailyLove: React.FC = () => {
                   className={`p-2 rounded-full transition-colors ${
                     favoritesMap[m.id] 
                       ? 'bg-rose-500 text-white shadow-md' 
-                      : 'bg-slate-100 dark:bg-plum-900/50 text-slate-400 dark:text-blush-300 hover:bg-slate-200 dark:hover:bg-plum-800'
+                      : 'bg-slate-100 dark:bg-plum-900/90 text-slate-400 dark:text-blush-300 hover:bg-slate-200 dark:hover:bg-plum-800'
                   }`}
                 >
                   <Bookmark className="w-4 h-4" />
@@ -230,7 +230,7 @@ export const DailyLove: React.FC = () => {
                 </p>
               </div>
 
-              <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-blush-300 pt-3 border-t border-slate-200 dark:border-rose-500/20">
+              <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-300 pt-3 border-t border-slate-200 dark:border-rose-500/20">
                 <span className="flex items-center gap-1">
                   <Heart className="w-3 h-3 text-rose-400 fill-rose-400" />
                   Love Note

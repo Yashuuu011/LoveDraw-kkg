@@ -38,7 +38,7 @@ export const Memories: React.FC = () => {
         <h1 className="font-serif text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white">
           Couple <span className="text-rose-600 dark:rose-gradient-text">Memories</span> 🖼️❤️
         </h1>
-        <p className="text-base text-slate-600 dark:text-blush-200/90 max-w-xl mx-auto">
+        <p className="text-base text-slate-600 dark:text-slate-200 max-w-xl mx-auto">
           Explore captured moments of joy, proposals, and love draw celebrations.
         </p>
       </div>
@@ -86,10 +86,10 @@ export const Memories: React.FC = () => {
               </div>
 
               <div className="p-5 space-y-2">
-                <p className="text-xs text-slate-600 dark:text-blush-200 line-clamp-2 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-200 line-clamp-2 leading-relaxed">
                   {m.description}
                 </p>
-                <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-rose-500/20 text-[11px] text-slate-500 dark:text-blush-300">
+                <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-rose-500/20 text-[11px] text-slate-500 dark:text-slate-300">
                   <span className="flex items-center gap-1">
                     <Calendar className="w-3 h-3 text-rose-500 dark:text-rose-400" />
                     {new Date(m.date).toLocaleDateString()}
@@ -138,10 +138,10 @@ export const Memories: React.FC = () => {
                   </div>
 
                   <h2 className="font-serif text-3xl font-bold text-slate-900 dark:text-white">{selectedMemory.title}</h2>
-                  <p className="text-sm text-slate-600 dark:text-blush-200 leading-relaxed">{selectedMemory.description}</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-200 leading-relaxed">{selectedMemory.description}</p>
                 </div>
 
-                <div className="pt-6 border-t border-slate-200 dark:border-rose-500/20 text-xs text-slate-500 dark:text-blush-300 space-y-2">
+                <div className="pt-6 border-t border-slate-200 dark:border-rose-500/20 text-xs text-slate-500 dark:text-slate-300 space-y-2">
                   <div className="flex items-center justify-between">
                     <span>Date Captured:</span>
                     <span className="text-slate-800 dark:text-white font-medium">{new Date(selectedMemory.date).toLocaleDateString()}</span>

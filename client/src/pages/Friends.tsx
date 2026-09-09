@@ -165,16 +165,16 @@ const Friends: React.FC = () => {
             </h2>
             
             {requests.length === 0 ? (
-              <p className="text-slate-500 text-sm dark:text-blush-200">No pending friend requests.</p>
+              <p className="text-slate-500 dark:text-slate-300 text-sm dark:text-blush-200">No pending friend requests.</p>
             ) : (
               <div className="space-y-4">
                 {requests.map(req => (
-                  <div key={req.id} className="flex items-center justify-between p-3 bg-white/50 dark:bg-plum-900/50 rounded-2xl border border-rose-100 dark:border-rose-400/20">
+                  <div key={req.id} className="flex items-center justify-between p-3 bg-white/50 dark:bg-plum-900/90 rounded-2xl border border-rose-100 dark:border-rose-400/20">
                     <div className="flex items-center gap-3">
                       <img src={req.sender.avatarUrl || '/default-avatar.png'} alt={req.sender.name} className="w-10 h-10 rounded-full" />
                       <div>
                         <p className="font-semibold text-slate-800 dark:text-white">{req.sender.name}</p>
-                        <p className="text-xs text-slate-500 dark:text-blush-300">Wants to be friends</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-300">Wants to be friends</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -198,11 +198,11 @@ const Friends: React.FC = () => {
             </h2>
             
             {friends.length === 0 ? (
-              <p className="text-slate-500 text-sm dark:text-blush-200">You haven't added any friends yet. Search for users to connect!</p>
+              <p className="text-slate-500 dark:text-slate-300 text-sm dark:text-blush-200">You haven't added any friends yet. Search for users to connect!</p>
             ) : (
               <div className="space-y-4">
                 {friends.map(friend => (
-                  <div key={friend.id} className="flex items-center justify-between p-3 bg-white/50 dark:bg-plum-900/50 rounded-2xl border border-rose-100 dark:border-rose-400/20 transition-all hover:border-rose-300">
+                  <div key={friend.id} className="flex items-center justify-between p-3 bg-white/50 dark:bg-plum-900/90 rounded-2xl border border-rose-100 dark:border-rose-400/20 transition-all hover:border-rose-300">
                     <div className="flex items-center gap-3 relative">
                       <div className="relative">
                         <img src={friend.avatarUrl || '/default-avatar.png'} alt={friend.name} className="w-10 h-10 rounded-full" />
@@ -210,7 +210,7 @@ const Friends: React.FC = () => {
                       </div>
                       <div>
                         <p className="font-semibold text-slate-800 dark:text-white">{friend.name}</p>
-                        <p className="text-xs text-slate-500 dark:text-blush-300">
+                        <p className="text-xs text-slate-500 dark:text-slate-300">
                           {friend.isOnline ? 'Online' : friend.lastSeen ? `Last seen ${new Date(friend.lastSeen).toLocaleDateString()}` : 'Offline'}
                         </p>
                       </div>
@@ -237,14 +237,14 @@ const Friends: React.FC = () => {
               placeholder="Search by name or number..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-3 pl-10 rounded-2xl bg-slate-50 dark:bg-plum-900/50 border border-slate-200 dark:border-rose-400/30 focus:outline-none focus:ring-2 focus:ring-rose-400/50 text-slate-800 dark:text-white"
+              className="w-full px-4 py-3 pl-10 rounded-2xl bg-slate-50 dark:bg-plum-900/90 border border-slate-200 dark:border-rose-400/30 focus:outline-none focus:ring-2 focus:ring-rose-400/50 text-slate-800 dark:text-white"
             />
             <Search className="w-5 h-5 text-slate-400 absolute left-3 top-3.5" />
           </div>
 
           <div className="space-y-4">
             {searchResults.length > 0 ? searchResults.map(su => (
-              <div key={su.id} className="flex items-center justify-between p-3 bg-white/50 dark:bg-plum-900/50 rounded-2xl">
+              <div key={su.id} className="flex items-center justify-between p-3 bg-white/50 dark:bg-plum-900/90 rounded-2xl">
                 <div className="flex items-center gap-3">
                   <img src={su.avatarUrl || '/default-avatar.png'} alt={su.name} className="w-10 h-10 rounded-full" />
                   <p className="font-medium text-slate-800 dark:text-white">{su.name}</p>
@@ -258,9 +258,9 @@ const Friends: React.FC = () => {
                 </button>
               </div>
             )) : searchQuery.length > 1 ? (
-              <p className="text-center text-slate-500 text-sm">No users found.</p>
+              <p className="text-center text-slate-500 dark:text-slate-300 text-sm">No users found.</p>
             ) : (
-              <p className="text-center text-slate-500 text-sm dark:text-blush-200">Start typing to find your loved ones.</p>
+              <p className="text-center text-slate-500 dark:text-slate-300 text-sm dark:text-blush-200">Start typing to find your loved ones.</p>
             )}
           </div>
         </div>

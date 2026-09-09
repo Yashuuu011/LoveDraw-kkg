@@ -148,7 +148,7 @@ export const Auth: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           {isRegister && (
             <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-600 dark:text-blush-200">Your Name</label>
+              <label className="text-xs font-medium text-slate-600 dark:text-slate-200">Your Name</label>
               <div className="relative">
                 <UserIcon className="w-4 h-4 text-rose-400 absolute left-3.5 top-3.5" />
                 <input
@@ -157,7 +157,7 @@ export const Auth: React.FC = () => {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Sarah Jenkins"
-                  className="w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 bg-rose-50/50 border-rose-200 text-slate-800 placeholder-slate-400 dark:glass-card dark:border-rose-400/30 dark:text-white dark:placeholder-blush-300/40"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 bg-rose-50/50 border-rose-200 text-slate-800 dark:text-white placeholder-slate-400 dark:glass-card dark:border-rose-400/30 dark:text-white dark:placeholder-blush-300/40"
                 />
               </div>
             </div>
@@ -165,7 +165,7 @@ export const Auth: React.FC = () => {
 
           {(!usePhone || isRegister || isForgotPassword) && (
             <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-600 dark:text-blush-200">
+              <label className="text-xs font-medium text-slate-600 dark:text-slate-200">
                 {isRegister ? 'Email Address (Optional if using phone)' : 'Email Address'}
               </label>
               <div className="relative">
@@ -176,7 +176,7 @@ export const Auth: React.FC = () => {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="your.email@lovedraw.com"
-                  className="w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 bg-rose-50/50 border-rose-200 text-slate-800 placeholder-slate-400 dark:glass-card dark:border-rose-400/30 dark:text-white dark:placeholder-blush-300/40"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 bg-rose-50/50 border-rose-200 text-slate-800 dark:text-white placeholder-slate-400 dark:glass-card dark:border-rose-400/30 dark:text-white dark:placeholder-blush-300/40"
                 />
               </div>
             </div>
@@ -184,7 +184,7 @@ export const Auth: React.FC = () => {
 
           {(usePhone || isRegister) && !isForgotPassword && (
             <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-600 dark:text-blush-200">
+              <label className="text-xs font-medium text-slate-600 dark:text-slate-200">
                 Phone Number {isRegister && '(Optional if using email)'}
               </label>
               <div className="relative flex gap-2">
@@ -197,7 +197,7 @@ export const Auth: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="+919876543210"
                     disabled={otpSent}
-                    className={`w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 bg-rose-50/50 border-rose-200 text-slate-800 placeholder-slate-400 dark:glass-card dark:border-rose-400/30 dark:text-white dark:placeholder-blush-300/40 ${otpSent ? 'opacity-50' : ''}`}
+                    className={`w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 bg-rose-50/50 border-rose-200 text-slate-800 dark:text-white placeholder-slate-400 dark:glass-card dark:border-rose-400/30 dark:text-white dark:placeholder-blush-300/40 ${otpSent ? 'opacity-50' : ''}`}
                   />
                 </div>
                 {!isRegister && usePhone && !otpSent && (
@@ -217,7 +217,7 @@ export const Auth: React.FC = () => {
           {/* OTP Input for Login */}
           {!isRegister && usePhone && otpSent && (
             <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-600 dark:text-blush-200">Enter OTP</label>
+              <label className="text-xs font-medium text-slate-600 dark:text-slate-200">Enter OTP</label>
               <div className="relative">
                 <KeyRound className="w-4 h-4 text-rose-400 absolute left-3.5 top-3.5" />
                 <input
@@ -226,7 +226,7 @@ export const Auth: React.FC = () => {
                   value={formData.otp}
                   onChange={(e) => setFormData({ ...formData, otp: e.target.value })}
                   placeholder="123456"
-                  className="w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 tracking-widest bg-rose-50/50 border-rose-200 text-slate-800 placeholder-slate-400 dark:glass-card dark:border-rose-400/30 dark:text-white dark:placeholder-blush-300/40"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 tracking-widest bg-rose-50/50 border-rose-200 text-slate-800 dark:text-white placeholder-slate-400 dark:glass-card dark:border-rose-400/30 dark:text-white dark:placeholder-blush-300/40"
                 />
               </div>
             </div>
@@ -236,7 +236,7 @@ export const Auth: React.FC = () => {
           {(!usePhone || isRegister) && !isForgotPassword && (
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-medium text-slate-600 dark:text-blush-200">Password</label>
+                <label className="text-xs font-medium text-slate-600 dark:text-slate-200">Password</label>
                 {!isRegister && (
                   <Link to="/forgot-password" className="text-[11px] text-rose-500 hover:underline">
                     Forgot?
@@ -251,7 +251,7 @@ export const Auth: React.FC = () => {
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 bg-rose-50/50 border-rose-200 text-slate-800 placeholder-slate-400 dark:glass-card dark:border-rose-400/30 dark:text-white dark:placeholder-blush-300/40"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl border text-sm focus:outline-none focus:border-rose-400 bg-rose-50/50 border-rose-200 text-slate-800 dark:text-white placeholder-slate-400 dark:glass-card dark:border-rose-400/30 dark:text-white dark:placeholder-blush-300/40"
                 />
               </div>
             </div>
@@ -278,7 +278,7 @@ export const Auth: React.FC = () => {
         </form>
 
         {/* Footer Navigation Switcher */}
-        <div className="text-center pt-2 text-xs text-slate-500 dark:text-blush-300">
+        <div className="text-center pt-2 text-xs text-slate-500 dark:text-slate-300">
           {isRegister ? (
             <p>
               Already have an account?{' '}

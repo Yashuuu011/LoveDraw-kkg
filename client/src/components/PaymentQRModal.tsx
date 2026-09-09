@@ -66,7 +66,7 @@ export const PaymentQRModal: React.FC<PaymentQRModalProps> = ({
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-full transition-colors bg-slate-100 text-slate-500 hover:text-slate-800 dark:glass-card dark:text-blush-200 dark:hover:text-white"
+            className="absolute top-4 right-4 p-2 rounded-full transition-colors bg-slate-100 text-slate-500 dark:text-slate-300 hover:text-slate-800 dark:text-white dark:glass-card dark:text-blush-200 dark:hover:text-white"
           >
             <X className="w-5 h-5" />
           </button>
@@ -76,7 +76,7 @@ export const PaymentQRModal: React.FC<PaymentQRModalProps> = ({
             <h3 className="font-serif text-2xl font-bold text-rose-600 dark:rose-gradient-text">
               {type === 'message' ? 'Unlock Daily Love 💌' : 'Join the Draw ❤️'}
             </h3>
-            <p className="text-sm font-medium text-slate-600 dark:text-blush-200">{title}</p>
+            <p className="text-sm font-medium text-slate-600 dark:text-slate-200">{title}</p>
           </div>
 
           {/* Static QR Code Image */}
@@ -105,7 +105,7 @@ export const PaymentQRModal: React.FC<PaymentQRModalProps> = ({
           </div>
 
           {/* Instructions */}
-          <div className="p-3.5 rounded-xl border text-xs space-y-1 bg-rose-50 border-rose-200 text-slate-600 dark:bg-rose-500/10 dark:border-rose-400/20 dark:text-blush-200">
+          <div className="p-3.5 rounded-xl border text-xs space-y-1 bg-rose-50 border-rose-200 text-slate-600 dark:text-slate-200 dark:bg-rose-500/10 dark:border-rose-400/20 dark:text-blush-200">
             <p className="font-semibold flex items-center gap-1 text-rose-600 dark:text-rose-300">
               <ShieldCheck className="w-4 h-4" />
               Payment Verification

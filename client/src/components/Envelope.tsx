@@ -59,7 +59,7 @@ export const Envelope: React.FC<EnvelopeProps> = ({ message, onFavorite, isFavor
               : { y: 0, scale: 0.95, zIndex: 5 }
           }
           transition={{ duration: 0.9, ease: [0.34, 1.56, 0.64, 1] }}
-          className="absolute left-4 right-4 bottom-4 top-4 bg-white text-slate-900 rounded-2xl p-6 sm:p-8 shadow-2xl flex flex-col justify-between border border-rose-200"
+          className="absolute left-4 right-4 bottom-4 top-4 bg-white text-slate-900 dark:text-white rounded-2xl p-6 sm:p-8 shadow-2xl flex flex-col justify-between border border-rose-200"
         >
           {/* Top Letter Header */}
           <div className="flex items-center justify-between border-b border-rose-200/60 pb-3">
@@ -78,7 +78,7 @@ export const Envelope: React.FC<EnvelopeProps> = ({ message, onFavorite, isFavor
               initial={{ opacity: 0 }}
               animate={isOpen ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="font-serif text-xl sm:text-2xl lg:text-3xl text-slate-900 leading-relaxed font-bold"
+              className="font-serif text-xl sm:text-2xl lg:text-3xl text-slate-900 dark:text-white leading-relaxed font-bold"
             >
               "{message.message}"
             </motion.p>

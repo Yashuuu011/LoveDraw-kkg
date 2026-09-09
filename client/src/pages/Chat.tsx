@@ -262,7 +262,7 @@ export const Chat: React.FC = () => {
                     <div className="flex justify-between items-center">
                       <span className="font-medium text-slate-800 dark:text-white truncate">{partner?.name}</span>
                       {lastMessage && (
-                        <span className="text-[10px] text-slate-500">
+                        <span className="text-[10px] text-slate-500 dark:text-slate-300">
                           {new Date(lastMessage.createdAt).toLocaleDateString() === new Date().toLocaleDateString() 
                             ? new Date(lastMessage.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                             : new Date(lastMessage.createdAt).toLocaleDateString()}
@@ -282,7 +282,7 @@ export const Chat: React.FC = () => {
               );
             })}
             {rooms.length === 0 && (
-              <p className="text-center text-sm text-slate-500 mt-10 p-4">No active conversations. Head to the Friends page to start a chat!</p>
+              <p className="text-center text-sm text-slate-500 dark:text-slate-300 mt-10 p-4">No active conversations. Head to the Friends page to start a chat!</p>
             )}
           </div>
         </div>
@@ -301,7 +301,7 @@ export const Chat: React.FC = () => {
                     <h3 className="font-serif font-bold text-slate-800 dark:text-white leading-tight">
                       {getPartner(selectedRoom)?.name}
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-blush-300">
+                    <p className="text-xs text-slate-500 dark:text-slate-300">
                       {getPartner(selectedRoom)?.isOnline ? (
                         <span className="text-emerald-500 font-medium">Online</span>
                       ) : getPartner(selectedRoom)?.lastSeen ? (
@@ -321,7 +321,7 @@ export const Chat: React.FC = () => {
                       <div className={`max-w-[70%] rounded-2xl p-3 ${
                         isMe 
                           ? 'bg-rose-500 text-white rounded-tr-sm shadow-md' 
-                          : 'bg-white text-slate-800 rounded-tl-sm shadow-sm border border-slate-100 dark:bg-plum-800 dark:border-plum-700 dark:text-white'
+                          : 'bg-white text-slate-800 dark:text-white rounded-tl-sm shadow-sm border border-slate-100 dark:bg-plum-800 dark:border-plum-700 dark:text-white'
                       }`}>
                         {msg.mediaUrl && (
                           <div className="mb-2 rounded-xl overflow-hidden">
@@ -356,7 +356,7 @@ export const Chat: React.FC = () => {
                   <div className="relative inline-block">
                     {attachment.type === 'IMAGE' && <img src={attachment.url} alt="Preview" className="h-20 rounded-lg shadow-sm" />}
                     {attachment.type === 'VIDEO' && <video src={attachment.url} className="h-20 rounded-lg shadow-sm" />}
-                    {attachment.type === 'AUDIO' && <div className="h-10 px-4 bg-slate-200 rounded-lg flex items-center text-xs text-slate-800">Audio attached</div>}
+                    {attachment.type === 'AUDIO' && <div className="h-10 px-4 bg-slate-200 rounded-lg flex items-center text-xs text-slate-800 dark:text-white">Audio attached</div>}
                     <button onClick={() => setAttachment(null)} className="absolute -top-2 -right-2 bg-rose-500 text-white rounded-full p-1 shadow-md hover:bg-rose-600 transition-colors">
                       <X className="w-3 h-3" />
                     </button>
@@ -376,7 +376,7 @@ export const Chat: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="p-3 rounded-full transition-colors bg-slate-50 text-slate-500 hover:text-rose-500 hover:bg-slate-100 dark:bg-plum-800 dark:text-rose-300 dark:hover:bg-plum-700"
+                  className="p-3 rounded-full transition-colors bg-slate-50 text-slate-500 dark:text-slate-300 hover:text-rose-500 hover:bg-slate-100 dark:bg-plum-800 dark:text-rose-300 dark:hover:bg-plum-700"
                 >
                   <Paperclip className="w-5 h-5" />
                 </button>
@@ -384,7 +384,7 @@ export const Chat: React.FC = () => {
                   value={newMessage}
                   onChange={handleInputChange}
                   placeholder="Type a message..."
-                  className="flex-1 rounded-2xl px-4 py-3 min-h-[48px] max-h-32 resize-none focus:outline-none bg-slate-50 border border-slate-200 text-slate-800 dark:bg-plum-800/50 dark:border-plum-700 dark:text-white dark:placeholder-blush-300/50 focus:border-rose-300 transition-colors"
+                  className="flex-1 rounded-2xl px-4 py-3 min-h-[48px] max-h-32 resize-none focus:outline-none bg-slate-50 border border-slate-200 text-slate-800 dark:text-white dark:bg-plum-800/90 dark:border-plum-700 dark:text-white dark:placeholder-slate-400 focus:border-rose-300 transition-colors"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
@@ -403,7 +403,7 @@ export const Chat: React.FC = () => {
             </>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-center px-4">
-              <div className="w-24 h-24 bg-rose-50 dark:bg-plum-800/50 rounded-full flex items-center justify-center mb-6 shadow-inner border border-rose-100 dark:border-plum-700">
+              <div className="w-24 h-24 bg-rose-50 dark:bg-plum-800/90 rounded-full flex items-center justify-center mb-6 shadow-inner border border-rose-100 dark:border-plum-700">
                 <Heart className="w-12 h-12 text-rose-400 fill-rose-400 opacity-60" />
               </div>
               <h3 className="text-2xl font-serif font-bold text-slate-700 dark:text-white">Your Private Space</h3>

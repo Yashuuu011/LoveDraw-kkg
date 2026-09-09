@@ -93,7 +93,7 @@ export const Navbar: React.FC = () => {
                 <button
                   key={link.name}
                   onClick={() => handleNavClick(link.path)}
-                  className={`relative text-sm font-medium transition-colors text-slate-600 hover:text-rose-500 dark:text-blush-200 dark:hover:text-rose-300 ${
+                  className={`relative text-sm font-medium transition-colors text-slate-600 dark:text-slate-200 hover:text-rose-500 dark:text-blush-200 dark:hover:text-rose-300 ${
                     isActive ? 'text-rose-500 dark:text-rose-400 font-semibold' : ''
                   }`}
                 >
@@ -116,7 +116,7 @@ export const Navbar: React.FC = () => {
               className="p-2 rounded-full glass-card hover:bg-rose-500/10 transition-colors"
               title="Toggle Theme"
             >
-              {theme === 'dark' ? <Sun className="w-5 h-5 text-gold-300" /> : <Moon className="w-5 h-5 text-slate-600" />}
+              {theme === 'dark' ? <Sun className="w-5 h-5 text-gold-300" /> : <Moon className="w-5 h-5 text-slate-600 dark:text-slate-200" />}
             </button>
 
             {isAuthenticated && user ? (
@@ -182,7 +182,7 @@ export const Navbar: React.FC = () => {
               <div className="flex items-center gap-3">
                 <Link
                   to="/login"
-                  className="px-4 py-2 text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-blush-200 dark:hover:text-white transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-100 hover:text-slate-900 dark:text-white dark:hover:text-white transition-colors"
                 >
                   Log In
                 </Link>
@@ -201,14 +201,14 @@ export const Navbar: React.FC = () => {
           <div className="md:hidden flex items-center gap-2">
             <button
               onClick={toggleTheme}
-              className="p-2.5 rounded-xl glass-card text-slate-700 dark:text-blush-200 hover:text-slate-900 dark:hover:text-white"
+              className="p-2.5 rounded-xl glass-card text-slate-700 dark:text-blush-200 hover:text-slate-900 dark:text-white dark:hover:text-white"
               title="Toggle Theme"
             >
-              {theme === 'dark' ? <Sun className="w-5 h-5 text-gold-300" /> : <Moon className="w-5 h-5 text-slate-800" />}
+              {theme === 'dark' ? <Sun className="w-5 h-5 text-gold-300" /> : <Moon className="w-5 h-5 text-slate-800 dark:text-white" />}
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 rounded-xl glass-card text-slate-700 dark:text-blush-200 hover:text-slate-900 dark:hover:text-white"
+              className="p-2.5 rounded-xl glass-card text-slate-700 dark:text-blush-200 hover:text-slate-900 dark:text-white dark:hover:text-white"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -231,7 +231,7 @@ export const Navbar: React.FC = () => {
                 <button
                   key={link.name}
                   onClick={() => handleNavClick(link.path)}
-                  className="w-full text-left px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:bg-rose-50 dark:text-blush-100 dark:hover:bg-rose-500/20 transition-colors flex items-center justify-between"
+                  className="w-full text-left px-4 py-3 rounded-xl text-base font-medium text-slate-700 dark:text-slate-100 hover:bg-rose-50 dark:text-blush-100 dark:hover:bg-rose-500/20 transition-colors flex items-center justify-between"
                 >
                   {link.name}
                   <Heart className="w-4 h-4 text-rose-400/40" />

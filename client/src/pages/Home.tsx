@@ -77,7 +77,7 @@ export const Home: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg sm:text-2xl text-slate-600 dark:text-blush-200/90 max-w-2xl mx-auto font-light leading-relaxed"
+            className="text-lg sm:text-2xl text-slate-600 dark:text-slate-200 max-w-2xl mx-auto font-light leading-relaxed"
           >
             Every day brings a new message. Every month brings a new memory.
           </motion.p>
@@ -107,7 +107,7 @@ export const Home: React.FC = () => {
           </motion.div>
 
           {/* Demo Notice tag */}
-          <p className="text-xs text-slate-500 dark:text-blush-300/60 pt-2">
+          <p className="text-xs text-slate-500 dark:text-slate-300 pt-2">
             ✨ Safe Demo Environment • Legally Permitted Prize Community
           </p>
         </div>
@@ -119,7 +119,7 @@ export const Home: React.FC = () => {
           <div className="text-center space-y-3 mb-8">
             <span className="text-xs font-bold uppercase tracking-widest text-gold-500 dark:text-gold-400">Daily Inspiration</span>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-rose-600 dark:rose-gradient-text">Today's Love Note 💌</h2>
-            <p className="text-sm text-slate-600 dark:text-blush-200">Tap the envelope to unseal today's romantic message.</p>
+            <p className="text-sm text-slate-600 dark:text-slate-200">Tap the envelope to unseal today's romantic message.</p>
           </div>
 
           <Envelope message={todayMessage} />
@@ -143,7 +143,7 @@ export const Home: React.FC = () => {
                   {featuredDraw.title}
                 </h2>
 
-                <p className="text-sm sm:text-base text-slate-600 dark:text-blush-200 leading-relaxed">
+                <p className="text-sm sm:text-base text-slate-600 dark:text-slate-200 leading-relaxed">
                   {featuredDraw.description}
                 </p>
 
@@ -193,7 +193,7 @@ export const Home: React.FC = () => {
         <div className="text-center space-y-3 mb-12">
           <span className="text-xs font-bold uppercase tracking-widest text-gold-500 dark:text-gold-400">Simple & Romantic</span>
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-rose-600 dark:rose-gradient-text">How It Works ✨</h2>
-          <p className="text-sm text-slate-600 dark:text-blush-200 max-w-lg mx-auto">Three elegant steps to participate and celebrate love.</p>
+          <p className="text-sm text-slate-600 dark:text-slate-200 max-w-lg mx-auto">Three elegant steps to participate and celebrate love.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -205,7 +205,7 @@ export const Home: React.FC = () => {
               <Calendar className="w-6 h-6" />
             </div>
             <h3 className="font-serif text-xl font-bold text-slate-900 dark:text-white">Discover 💌</h3>
-            <p className="text-sm text-slate-600 dark:text-blush-200 leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-slate-200 leading-relaxed">
               Open today's love message every single day to uncover a fresh, heart-warming quote.
             </p>
           </div>
@@ -218,7 +218,7 @@ export const Home: React.FC = () => {
               <Heart className="w-6 h-6" />
             </div>
             <h3 className="font-serif text-xl font-bold text-slate-900 dark:text-white">Join ❤️</h3>
-            <p className="text-sm text-slate-600 dark:text-blush-200 leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-slate-200 leading-relaxed">
               Participate in an eligible weekly or monthly draw using our safe demo QR gateway.
             </p>
           </div>
@@ -231,7 +231,7 @@ export const Home: React.FC = () => {
               <Trophy className="w-6 h-6" />
             </div>
             <h3 className="font-serif text-xl font-bold text-slate-900 dark:text-white">Celebrate 🎉</h3>
-            <p className="text-sm text-slate-600 dark:text-blush-200 leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-slate-200 leading-relaxed">
               On draw day, watch the cinematic winner reveal animation and celebrate couple memories.
             </p>
           </div>

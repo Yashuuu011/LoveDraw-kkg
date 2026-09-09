@@ -43,7 +43,7 @@ export const Draws: React.FC = () => {
         <h1 className="font-serif text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white">
           Romantic <span className="text-rose-600 dark:rose-gradient-text">Love Draws</span> ❤️
         </h1>
-        <p className="text-base text-slate-600 dark:text-blush-200/90 max-w-xl mx-auto">
+        <p className="text-base text-slate-600 dark:text-slate-200 max-w-xl mx-auto">
           Participate in curated luxury couple photo packages, stargazing hampers, and romantic experiences.
         </p>
       </div>
@@ -58,7 +58,7 @@ export const Draws: React.FC = () => {
               className={`px-6 py-2 rounded-full text-xs font-bold transition-all ${
                 filter === tab
                   ? 'bg-gradient-to-r from-rose-500 to-burgundy-600 text-white shadow-lg'
-                  : 'text-slate-600 hover:text-slate-900 dark:text-blush-200 dark:hover:text-white'
+                  : 'text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:text-white dark:hover:text-white'
               }`}
             >
               {tab === 'ALL' && 'All Draws'}
@@ -82,7 +82,7 @@ export const Draws: React.FC = () => {
           <p className="text-lg font-serif text-slate-800 dark:text-white font-semibold">
             No draws available for this filter right now.
           </p>
-          <p className="text-sm text-slate-600 dark:text-blush-200 mt-1">Check back soon for new romantic draws! ❤️</p>
+          <p className="text-sm text-slate-600 dark:text-slate-200 mt-1">Check back soon for new romantic draws! ❤️</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
