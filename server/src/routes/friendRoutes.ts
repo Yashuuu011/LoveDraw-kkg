@@ -1,5 +1,5 @@
 import express from 'express';
-import { authenticate } from '../middleware/auth';
+import { authenticateUser } from '../middleware/auth';
 import {
   sendFriendRequest,
   getFriendRequests,
@@ -11,12 +11,12 @@ import {
 
 const router = express.Router();
 
-router.post('/request', authenticate, sendFriendRequest);
-router.get('/requests', authenticate, getFriendRequests);
-router.post('/accept/:id', authenticate, acceptFriendRequest);
-router.post('/reject/:id', authenticate, rejectFriendRequest);
-router.delete('/request/:id', authenticate, rejectFriendRequest); // cancellation
-router.get('/', authenticate, getFriends);
-router.delete('/:friendId', authenticate, removeFriend);
+router.post('/request', authenticateUser, sendFriendRequest);
+router.get('/requests', authenticateUser, getFriendRequests);
+router.post('/accept/:id', authenticateUser, acceptFriendRequest);
+router.post('/reject/:id', authenticateUser, rejectFriendRequest);
+router.delete('/request/:id', authenticateUser, rejectFriendRequest); // cancellation
+router.get('/', authenticateUser, getFriends);
+router.delete('/:friendId', authenticateUser, removeFriend);
 
 export default router;

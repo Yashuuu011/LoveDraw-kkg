@@ -50,13 +50,14 @@ export const sendFriendRequest = async (req: AuthRequest, res: Response) => {
     });
 
     // Notify receiver
+    const senderUser = await prisma.user.findUnique({ where: { id: senderId } });
     const io = getIO();
     io.to(receiverId).emit('friend_request', {
       requestId: request.id,
       sender: {
         id: req.user.id,
         name: req.user.name,
-        avatarUrl: req.user.avatarUrl
+        avatarUrl: senderUser?.avatarUrl
       }
     });
 
@@ -115,11 +116,12 @@ export const acceptFriendRequest = async (req: AuthRequest, res: Response) => {
       data: { userId: request.senderId, friendId: request.receiverId }
     });
 
+    const currentUser = await prisma.user.findUnique({ where: { id: req.user.id } });
     const io = getIO();
     io.to(request.senderId).emit('friend_request_accepted', {
       friendId: req.user.id,
       name: req.user.name,
-      avatarUrl: req.user.avatarUrl
+      avatarUrl: currentUser?.avatarUrl
     });
 
     return res.json({ success: true, message: 'Friend request accepted.' });
