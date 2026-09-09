@@ -11,6 +11,7 @@ import CustomCursor from './components/CustomCursor';
 import PageTransition from './components/PageTransition';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import GlobalSocketListeners from './components/GlobalSocketListeners';
 
 // Pages
 import Home from './pages/Home';
@@ -59,6 +60,7 @@ export const App: React.FC = () => {
             <ToastProvider>
               <Router>
                 <CustomCursor />
+                <GlobalSocketListeners />
                 <div className="relative min-h-screen flex flex-col justify-between">
                   <div className="film-grain" />
                   {/* Scanline overlay for cinematic HUD effect */}

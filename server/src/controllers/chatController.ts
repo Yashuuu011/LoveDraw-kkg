@@ -8,22 +8,25 @@ export const getUsers = async (req: AuthRequest, res: Response) => {
     if (!req.user) return res.status(401).json({ success: false, message: 'Not authenticated.' });
     
     const { search } = req.query;
-    let whereClause: any = { id: { not: req.user.id } };
+    
+    // Fetch all users except self (max 10 users in system anyway)
+    const allUsers = await prisma.user.findMany({
+      where: { id: { not: req.user.id } },
+      select: { id: true, name: true, email: true, phone: true, avatarUrl: true }
+    });
+
+    let filteredUsers = allUsers;
 
     if (search && typeof search === 'string') {
-      whereClause.OR = [
-        { phone: { contains: search } },
-        { name: { contains: search } }
-      ];
+      const lowerSearch = search.toLowerCase();
+      filteredUsers = allUsers.filter(u => 
+        (u.name && u.name.toLowerCase().includes(lowerSearch)) ||
+        (u.phone && u.phone.toLowerCase().includes(lowerSearch)) ||
+        (u.email && u.email.toLowerCase().includes(lowerSearch))
+      );
     }
 
-    const users = await prisma.user.findMany({
-      where: whereClause,
-      select: { id: true, name: true, email: true, phone: true, avatarUrl: true },
-      take: 20 // limit results for search
-    });
-    
-    return res.json({ success: true, data: users });
+    return res.json({ success: true, data: filteredUsers.slice(0, 20) });
   } catch (error) {
     return res.status(500).json({ success: false, message: 'Failed to fetch users.' });
   }

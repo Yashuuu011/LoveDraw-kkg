@@ -25,7 +25,9 @@ export const Auth: React.FC = () => {
     email: '',
     phone: '',
     password: '',
-    otp: ''
+    otp: '',
+    bio: '',
+    dateOfBirth: ''
   });
   
   // Cinematic loading states
@@ -206,6 +208,35 @@ export const Auth: React.FC = () => {
                   autoComplete="name"
                   className="w-full pl-10 pr-4 py-2.5 bg-black/60 border border-marvel-blue/50 text-white text-sm focus:outline-none focus:border-marvel-blue focus:shadow-[0_0_15px_rgba(81,140,202,0.4)] transition-all font-sans"
                 />
+              </div>
+            </div>
+          )}
+
+          {isRegister && (
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-marvel-blue uppercase tracking-widest">Date of Birth</label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    required
+                    value={formData.dateOfBirth}
+                    onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
+                    className="w-full px-4 py-2.5 bg-black/60 border border-marvel-blue/50 text-white text-sm focus:outline-none focus:border-marvel-blue focus:shadow-[0_0_15px_rgba(81,140,202,0.4)] transition-all font-sans [color-scheme:dark]"
+                  />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-marvel-blue uppercase tracking-widest">Hero Bio</label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={formData.bio}
+                    onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                    placeholder="Short bio..."
+                    className="w-full px-4 py-2.5 bg-black/60 border border-marvel-blue/50 text-white text-sm focus:outline-none focus:border-marvel-blue focus:shadow-[0_0_15px_rgba(81,140,202,0.4)] transition-all font-sans"
+                  />
+                </div>
               </div>
             </div>
           )}

@@ -18,6 +18,8 @@ const registerSchema = z.object({
   email: z.string().email('Invalid email address').optional().or(z.literal('')),
   phone: z.string().min(10, 'Phone must be valid').optional().or(z.literal('')),
   password: z.string().min(6, 'Password must be at least 6 characters').optional().or(z.literal('')),
+  bio: z.string().optional(),
+  dateOfBirth: z.string().optional(),
 }).refine(data => data.email || data.phone, {
   message: "Either email or phone is required",
   path: ["email"]
@@ -59,6 +61,8 @@ export const register = async (req: Request, res: Response) => {
         email: validated.email || null,
         phone: validated.phone || null,
         passwordHash,
+        bio: validated.bio || null,
+        dateOfBirth: validated.dateOfBirth ? new Date(validated.dateOfBirth) : null,
         avatarUrl: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(validated.name)}`
       }
     });

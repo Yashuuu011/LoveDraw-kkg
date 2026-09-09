@@ -52,7 +52,7 @@ export const Friends: React.FC = () => {
     playClick();
     if (!searchQuery.trim()) return;
     try {
-      const response = await api.get(`/users/search?q=${searchQuery}`);
+      const response = await api.get(`/chat/users?search=${searchQuery}`);
       if (response.data.success) setSearchResults(response.data.data);
     } catch (error) {
       addToast('Search failed.', 'error');
@@ -80,7 +80,8 @@ export const Friends: React.FC = () => {
     // Wait for animation to finish before removing from DOM
     setTimeout(async () => {
       try {
-        await api.post('/friends/respond', { requestId, status });
+        const endpoint = status === 'ACCEPTED' ? `/friends/accept/${requestId}` : `/friends/reject/${requestId}`;
+        await api.post(endpoint);
         fetchFriendsAndRequests();
       } catch (error: any) {
         addToast(error.response?.data?.message || 'Action failed', 'error');
