@@ -17,7 +17,7 @@ export async function initDatabase() {
         name: 'Ketan Gehlot',
         email: 'ketan@shield.com',
         phone: '9999999999',
-        password: hashedPassword,
+        passwordHash: hashedPassword,
         avatarUrl: 'https://api.dicebear.com/7.x/bottts/svg?seed=ketan'
       }
     });
@@ -30,7 +30,7 @@ export async function initDatabase() {
         name: 'Peter Parker',
         email: 'peter@shield.com',
         phone: '8888888888',
-        password: hashedPassword,
+        passwordHash: hashedPassword,
         avatarUrl: 'https://api.dicebear.com/7.x/bottts/svg?seed=peter'
       }
     });
