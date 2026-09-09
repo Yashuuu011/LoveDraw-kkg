@@ -5,6 +5,7 @@ import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { useSocket } from '../context/SocketContext';
+import { useLocation } from 'react-router-dom';
 
 interface User {
   id: string;
@@ -42,6 +43,7 @@ export const Chat: React.FC = () => {
   const { user } = useAuth();
   const { showToast } = useToast();
   const { socket } = useSocket();
+  const location = useLocation();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -49,6 +51,15 @@ export const Chat: React.FC = () => {
   useEffect(() => {
     fetchRooms();
   }, []);
+
+  useEffect(() => {
+    if (rooms.length > 0 && location.state?.roomId) {
+      const targetRoom = rooms.find(r => r.id === location.state.roomId);
+      if (targetRoom) {
+        setSelectedRoom(targetRoom);
+      }
+    }
+  }, [rooms, location.state]);
 
   useEffect(() => {
     if (selectedRoom) {

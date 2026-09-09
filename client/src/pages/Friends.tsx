@@ -139,7 +139,7 @@ const Friends: React.FC = () => {
     try {
       const res = await api.post('/chat/rooms', { partnerId: friendId });
       if (res.data.success) {
-        navigate('/chat');
+        navigate('/chat', { state: { roomId: res.data.data.id } });
       }
     } catch (err) {
       showToast('Failed to start chat', 'error');

@@ -21,7 +21,7 @@ export const initializeSocket = (httpServer: HttpServer) => {
       const token = socket.handshake.auth.token;
       if (!token) return next(new Error('Authentication error'));
 
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret') as { id: string };
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'lovedraw_secret_key_romantic_2026_super_secure') as { id: string };
       const user = await prisma.user.findUnique({ where: { id: decoded.id } });
       
       if (!user) return next(new Error('User not found'));
