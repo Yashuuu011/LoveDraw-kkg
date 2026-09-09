@@ -101,6 +101,10 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ success: false, message: 'Invalid email or password.' });
     }
 
+    if (!user.passwordHash) {
+      return res.status(401).json({ success: false, message: 'Please login using the OTP method or register an account with a password.' });
+    }
+
     const isMatch = await bcrypt.compare(validated.password, user.passwordHash);
     if (!isMatch) {
       return res.status(401).json({ success: false, message: 'Invalid email or password.' });
