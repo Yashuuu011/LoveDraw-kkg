@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Menu, X, User as UserIcon, LogOut, ShieldCheck, Sparkles, Gift, Sun, Moon } from 'lucide-react';
+import { Heart, Menu, X, User as UserIcon, LogOut, ShieldCheck, Zap, Sun, Moon, Volume2, VolumeX } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { useSound } from '../context/SoundContext';
 
 export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -12,80 +13,72 @@ export const Navbar: React.FC = () => {
 
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { soundEnabled, toggleSound, playClick } = useSound();
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      if (window.scrollY > 20) setScrolled(true);
+      else setScrolled(false);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close menus on route change
   useEffect(() => {
     setMobileMenuOpen(false);
     setUserDropdownOpen(false);
   }, [location.pathname]);
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Daily Love', path: '/daily-love' },
-    { name: 'Draws', path: '/draws' },
-    { name: 'Memories', path: '/memories' },
-    { name: 'Friends', path: '/friends' },
-    { name: 'Private Chat', path: '/chat' },
-    { name: 'How It Works', path: '/#how-it-works' },
+    { name: 'Multiverse HQ', path: '/' },
+    { name: 'Spider-Notes', path: '/daily-love' },
+    { name: 'Strange Draws', path: '/draws' },
+    { name: 'Cap Memories', path: '/memories' },
+    { name: 'Avengers Comms', path: '/friends' },
+    { name: 'Stark Chat', path: '/chat' },
   ];
 
   const handleNavClick = (path: string) => {
-    if (path.includes('#')) {
-      const element = document.getElementById('how-it-works');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        navigate('/');
-        setTimeout(() => {
-          document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-      }
-    } else {
-      navigate(path);
-    }
+    playClick();
+    navigate(path);
   };
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? 'py-3 glass-panel shadow-2xl backdrop-blur-xl' : 'py-3 bg-white/70 dark:bg-plum-950/60 backdrop-blur-md'
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 border-b ${
+        scrolled 
+          ? 'py-3 glass-panel border-primary/50 shadow-[0_4px_30px_var(--glow-color)]' 
+          : 'py-4 bg-transparent border-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          {/* Brand Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-burgundy-700 via-rose-500 to-gold-400 p-0.5 shadow-lg group-hover:scale-105 transition-transform duration-300">
-              <div className="w-full h-full bg-plum-900 rounded-full flex items-center justify-center">
-                <Heart className="w-5 h-5 text-rose-400 fill-rose-400 group-hover:animate-ping" />
+          {/* Brand Logo - Arc Reactor / HUD Style */}
+          <Link to="/" onClick={playClick} className="flex items-center gap-3 group">
+            <div className="relative w-12 h-12 flex items-center justify-center">
+              <motion.div 
+                className="absolute inset-0 rounded-full border-2 border-accent border-dashed opacity-50 group-hover:opacity-100"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+              />
+              <div className="w-10 h-10 rounded-full bg-marvel-navy border border-primary flex items-center justify-center shadow-[0_0_15px_var(--primary)] group-hover:shadow-[0_0_25px_var(--accent)] transition-all">
+                <Heart className="w-5 h-5 text-primary fill-primary animate-pulse" />
               </div>
             </div>
             <div className="flex flex-col">
-              <span className="font-serif text-2xl font-bold rose-gradient-text tracking-wide">
+              <span className="font-serif text-2xl font-bold cinematic-gradient-text tracking-widest uppercase">
                 LoveDraw
               </span>
-              <span className="text-[9px] text-gold-400 tracking-widest uppercase font-medium -mt-1">
-                Luck & Love ❤️
+              <span className="text-[9px] text-accent tracking-[0.2em] font-sans uppercase -mt-1 flex items-center gap-1">
+                <Zap className="w-2.5 h-2.5" /> Cinematic Universe
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => {
               if ((link.path === '/chat' || link.path === '/friends') && !isAuthenticated) return null;
               const isActive = location.pathname === link.path;
@@ -93,106 +86,106 @@ export const Navbar: React.FC = () => {
                 <button
                   key={link.name}
                   onClick={() => handleNavClick(link.path)}
-                  className={`relative text-sm font-medium transition-colors text-slate-600 dark:text-slate-200 hover:text-rose-500 dark:text-blush-200 dark:hover:text-rose-300 ${
-                    isActive ? 'text-rose-500 dark:text-rose-400 font-semibold' : ''
+                  className={`relative px-3 py-2 text-xs uppercase tracking-widest font-sans font-bold transition-all hover:text-primary ${
+                    isActive ? 'text-primary hologram-text' : 'text-text-secondary'
                   }`}
+                  onMouseEnter={playClick}
                 >
                   {link.name}
                   {isActive && (
                     <motion.div
-                      layoutId="activeIndicator"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-rose-400 to-gold-400 rounded-full"
+                      layoutId="activeHud"
+                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary shadow-[0_0_10px_var(--primary)]"
                     />
                   )}
+                  {/* Subtle hover bracket effect */}
+                  <div className="absolute inset-0 border border-primary/0 hover:border-primary/50 transition-colors rounded opacity-0 hover:opacity-100" />
                 </button>
               );
             })}
           </nav>
 
-          {/* Desktop Right CTA / User Profile */}
+          {/* Desktop Right Controls */}
           <div className="hidden md:flex items-center gap-4">
-            {/* Animated Pill Theme Toggle */}
+            
+            {/* Sound Toggle */}
             <button
-              onClick={toggleTheme}
-              className="relative w-16 h-8 rounded-full bg-background-secondary border border-border flex items-center p-1 cursor-pointer transition-all hover:shadow-[0_0_15px_var(--glow-color)]"
-              aria-label="Toggle Theme"
+              onClick={() => { playClick(); toggleSound(); }}
+              className="p-2 rounded-full glass-card text-text-secondary hover:text-accent border border-border hover:border-accent hover:shadow-[0_0_15px_var(--glow-color)] transition-all"
+              title="Toggle Sound"
             >
-              <div className="flex w-full justify-between px-1.5 z-0 text-sm">
-                <span>🌙</span>
-                <span>☀️</span>
-              </div>
-              <motion.div
-                layout
-                className="absolute w-6 h-6 bg-card rounded-full shadow-md flex items-center justify-center z-10"
-                initial={false}
-                animate={{
-                  left: theme === 'dark' ? '4px' : 'calc(100% - 28px)'
-                }}
-                transition={{ type: "spring", stiffness: 500, damping: 30 }}
-              >
-                {theme === 'dark' ? (
-                  <Moon className="w-3.5 h-3.5 text-accent" />
-                ) : (
-                  <Sun className="w-3.5 h-3.5 text-primary" />
-                )}
-              </motion.div>
+              {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            </button>
+
+            {/* Theme Toggle (Light/Dark Universe) */}
+            <button
+              onClick={() => { playClick(); toggleTheme(); }}
+              className="p-2 rounded-full glass-card text-text-secondary hover:text-primary border border-border hover:border-primary hover:shadow-[0_0_15px_var(--glow-color)] transition-all"
+              title="Toggle Universe"
+            >
+              {theme === 'dark' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
             </button>
 
             {isAuthenticated && user ? (
               <div className="relative">
                 <button
-                  onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="flex items-center gap-2.5 p-1.5 pr-3 rounded-full glass-card hover:border-rose-400/40 transition-all"
+                  onClick={() => { playClick(); setUserDropdownOpen(!userDropdownOpen); }}
+                  className="flex items-center gap-2 p-1.5 pr-3 rounded-full glass-card border border-border hover:border-accent hover:shadow-[0_0_15px_var(--glow-color)] transition-all"
                 >
-                  <img
-                    src={user.avatarUrl || 'https://api.dicebear.com/7.x/initials/svg?seed=Love'}
-                    alt={user.name}
-                    className="w-8 h-8 rounded-full border border-rose-400/30 object-cover"
-                  />
-                  <span className="text-sm font-medium text-slate-700 dark:text-blush-100 max-w-[100px] truncate">
+                  <div className="w-8 h-8 rounded-full border-2 border-primary overflow-hidden flex items-center justify-center bg-marvel-navy">
+                    <img
+                      src={user.avatarUrl || 'https://api.dicebear.com/7.x/bottts/svg?seed=Love'}
+                      alt={user.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <span className="text-xs font-bold text-text-primary uppercase tracking-wider max-w-[100px] truncate">
                     {user.name}
                   </span>
                 </button>
 
-                {/* Dropdown Menu */}
+                {/* Holographic Dropdown Menu */}
                 <AnimatePresence>
                   {userDropdownOpen && (
                     <motion.div
                       initial={{ opacity: 0, y: 10, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      className="absolute right-0 mt-2 w-56 glass-panel rounded-2xl p-2 shadow-2xl border border-rose-400/30 overflow-hidden"
+                      className="absolute right-0 mt-3 w-56 glass-panel rounded-xl p-2 shadow-2xl border border-primary/50 overflow-hidden"
                     >
-                      <div className="px-3 py-2 border-b border-rose-500/20">
-                        <p className="text-xs text-rose-300 font-medium">Signed in as</p>
-                        <p className="text-sm font-semibold text-slate-800 dark:text-white truncate">{user.email}</p>
+                      <div className="scanlines" />
+                      <div className="px-3 py-2 border-b border-primary/20 relative z-10">
+                        <p className="text-[10px] text-accent font-bold uppercase tracking-widest">Hero ID</p>
+                        <p className="text-xs font-semibold text-text-primary truncate">{user.email}</p>
                       </div>
 
-                      <Link
-                        to="/profile"
-                        className="flex items-center gap-2.5 px-3 py-2.5 text-sm text-slate-700 dark:text-blush-100 hover:bg-rose-500/10 dark:hover:bg-rose-500/20 rounded-xl transition-colors mt-1"
-                      >
-                        <UserIcon className="w-4 h-4 text-rose-400" />
-                        My Profile & History
-                      </Link>
-
-                      {isAdmin && (
+                      <div className="relative z-10 mt-1">
                         <Link
-                          to="/admin"
-                          className="flex items-center gap-2.5 px-3 py-2.5 text-sm text-gold-300 hover:bg-gold-500/20 rounded-xl transition-colors"
+                          to="/profile"
+                          className="flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold uppercase text-text-secondary hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
                         >
-                          <ShieldCheck className="w-4 h-4 text-gold-400" />
-                          Admin Dashboard
+                          <UserIcon className="w-4 h-4" />
+                          Suit Dashboard
                         </Link>
-                      )}
 
-                      <button
-                        onClick={logout}
-                        className="w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-rose-400 hover:bg-rose-500/20 rounded-xl transition-colors mt-1 border-t border-rose-500/20"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        Sign Out
-                      </button>
+                        {isAdmin && (
+                          <Link
+                            to="/admin"
+                            className="flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold uppercase text-marvel-blue hover:text-white hover:bg-marvel-blue/20 rounded-lg transition-colors mt-1"
+                          >
+                            <ShieldCheck className="w-4 h-4" />
+                            S.H.I.E.L.D Comms
+                          </Link>
+                        )}
+
+                        <button
+                          onClick={logout}
+                          className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold uppercase text-primary hover:bg-primary/20 rounded-lg transition-colors mt-1 border-t border-primary/20"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          Disconnect
+                        </button>
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -201,34 +194,31 @@ export const Navbar: React.FC = () => {
               <div className="flex items-center gap-3">
                 <Link
                   to="/login"
-                  className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-100 hover:text-slate-900 dark:text-white dark:hover:text-white transition-colors"
+                  onClick={playClick}
+                  className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-text-secondary hover:text-primary transition-colors"
                 >
                   Log In
                 </Link>
                 <Link
                   to="/register"
-                  className="px-5 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-rose-500 to-burgundy-600 hover:from-rose-400 hover:to-burgundy-500 text-white shadow-lg shadow-rose-900/40 hover:shadow-rose-600/50 transition-all transform hover:-translate-y-0.5 flex items-center gap-1.5"
+                  onClick={playClick}
+                  className="px-5 py-2.5 rounded-none bg-primary/20 border border-primary text-primary hover:bg-primary hover:text-white text-xs font-bold uppercase tracking-widest shadow-[0_0_15px_var(--glow-color)] transition-all"
+                  style={{ clipPath: 'polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)' }}
                 >
-                  <Sparkles className="w-4 h-4 text-gold-300 animate-pulse" />
-                  Join Now
+                  Join Initiative
                 </Link>
               </div>
             )}
           </div>
 
-          {/* Mobile Theme & Hamburger Button */}
+          {/* Mobile Hamburger & Controls */}
           <div className="md:hidden flex items-center gap-2">
-            <button
-              onClick={toggleTheme}
-              className="p-2.5 rounded-xl glass-card text-slate-700 dark:text-blush-200 hover:text-slate-900 dark:text-white dark:hover:text-white"
-              title="Toggle Theme"
-            >
-              {theme === 'dark' ? <Sun className="w-5 h-5 text-gold-300" /> : <Moon className="w-5 h-5 text-slate-800 dark:text-white" />}
+            <button onClick={() => { playClick(); toggleTheme(); }} className="p-2 text-primary">
+              {theme === 'dark' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
             </button>
             <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 rounded-xl glass-card text-slate-700 dark:text-blush-200 hover:text-slate-900 dark:text-white dark:hover:text-white"
-              aria-label="Toggle menu"
+              onClick={() => { playClick(); setMobileMenuOpen(!mobileMenuOpen); }}
+              className="p-2 text-primary"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -236,67 +226,50 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Animated Menu Drawer */}
+      {/* Mobile Holographic Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass-panel border-b border-rose-500/30 overflow-hidden"
+            className="md:hidden glass-panel border-b border-primary/50 overflow-hidden relative"
           >
-            <div className="px-4 pt-3 pb-6 space-y-3">
+            <div className="scanlines" />
+            <div className="px-4 pt-3 pb-6 space-y-2 relative z-10">
               {navLinks.map((link) => (
                 <button
                   key={link.name}
                   onClick={() => handleNavClick(link.path)}
-                  className="w-full text-left px-4 py-3 rounded-xl text-base font-medium text-slate-700 dark:text-slate-100 hover:bg-rose-50 dark:text-blush-100 dark:hover:bg-rose-500/20 transition-colors flex items-center justify-between"
+                  className="w-full text-left px-4 py-3 rounded-lg bg-background-secondary border border-border text-xs font-bold uppercase tracking-widest text-text-primary hover:border-primary transition-colors flex items-center justify-between"
                 >
                   {link.name}
-                  <Heart className="w-4 h-4 text-rose-400/40" />
+                  <Zap className="w-3 h-3 text-primary" />
                 </button>
               ))}
 
-              <div className="pt-4 border-t border-rose-500/20 space-y-2">
+              <div className="pt-4 border-t border-primary/20 space-y-2 mt-4">
                 {isAuthenticated && user ? (
                   <>
-                    <Link
-                      to="/profile"
-                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-rose-500/20 text-white font-medium"
-                    >
-                      <UserIcon className="w-5 h-5 text-rose-400" />
-                      Profile ({user.name})
+                    <Link to="/profile" className="w-full flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary font-bold text-xs uppercase rounded-lg border border-primary/30">
+                      <UserIcon className="w-4 h-4" /> Suit Dashboard
                     </Link>
                     {isAdmin && (
-                      <Link
-                        to="/admin"
-                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gold-500/20 text-gold-300 font-medium"
-                      >
-                        <ShieldCheck className="w-5 h-5 text-gold-400" />
-                        Admin Dashboard
+                      <Link to="/admin" className="w-full flex items-center gap-3 px-4 py-3 bg-marvel-blue/10 text-marvel-blue font-bold text-xs uppercase rounded-lg border border-marvel-blue/30">
+                        <ShieldCheck className="w-4 h-4" /> S.H.I.E.L.D Comms
                       </Link>
                     )}
-                    <button
-                      onClick={logout}
-                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-rose-400 hover:bg-rose-500/10 font-medium"
-                    >
-                      <LogOut className="w-5 h-5" />
-                      Sign Out
+                    <button onClick={logout} className="w-full flex items-center gap-3 px-4 py-3 text-primary font-bold text-xs uppercase">
+                      <LogOut className="w-4 h-4" /> Disconnect
                     </button>
                   </>
                 ) : (
                   <div className="grid grid-cols-2 gap-3 pt-2">
-                    <Link
-                      to="/login"
-                      className="w-full py-3 text-center rounded-xl glass-card text-slate-700 dark:text-blush-100 font-medium"
-                    >
+                    <Link to="/login" className="w-full py-3 text-center bg-background-secondary border border-border text-text-primary font-bold text-xs uppercase">
                       Log In
                     </Link>
-                    <Link
-                      to="/register"
-                      className="w-full py-3 text-center rounded-xl bg-gradient-to-r from-rose-500 to-burgundy-600 text-white font-semibold shadow-lg"
-                    >
-                      Join Now
+                    <Link to="/register" className="w-full py-3 text-center bg-primary text-white font-bold text-xs uppercase">
+                      Join
                     </Link>
                   </div>
                 )}

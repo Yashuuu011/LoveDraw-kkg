@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User as UserIcon, Heart, Trophy, Gift, Bookmark, Calendar, Phone, Edit3, X } from 'lucide-react';
+import { Shield, Zap, Target, Server, Database, Phone, Calendar, Crosshair, X, Activity, Cpu } from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { Entry, DailyMessage, Winner } from '../types';
 import { formatDateIST } from '../utils/dateFormatter';
+import { useSound } from '../context/SoundContext';
 
 export const Profile: React.FC = () => {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
   const { addToast } = useToast();
+  const { playClick, playSuccess, playNotification } = useSound();
   const [entries, setEntries] = useState<Entry[]>([]);
   const [winnings, setWinnings] = useState<Winner[]>([]);
   const [favoriteMessages, setFavoriteMessages] = useState<DailyMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const navigate = useNavigate();
 
   // Edit State
@@ -57,6 +60,8 @@ export const Profile: React.FC = () => {
 
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    playClick();
+    setIsSaving(true);
     try {
       const res = await api.put('/auth/profile', {
         bio: editForm.bio,
@@ -64,203 +69,251 @@ export const Profile: React.FC = () => {
         dateOfBirth: editForm.dateOfBirth || null
       });
       if (res.data.success) {
-        addToast('Profile updated successfully!', 'success');
+        playSuccess();
+        addToast('SUIT CALIBRATION COMPLETE', 'success');
         setIsEditing(false);
-        // Refresh page or context to get updated user data
         window.location.reload(); 
       }
     } catch (error) {
-      addToast('Failed to update profile', 'error');
+      addToast('CALIBRATION FAILED', 'error');
+    } finally {
+      setIsSaving(false);
     }
   };
 
   if (authLoading || loading) {
     return (
-      <div className="pt-32 pb-20 text-center">
-        <p className="text-primary font-serif italic text-lg animate-pulse">
-          Loading your romantic profile... 💕
+      <div className="pt-32 pb-20 text-center min-h-screen bg-black flex flex-col items-center justify-center">
+        <Crosshair className="w-16 h-16 text-marvel-blue mx-auto mb-6 animate-spin-slow" />
+        <p className="text-marvel-blue font-mono font-bold text-lg uppercase tracking-[0.3em] animate-pulse">
+          Initializing Suit Diagnostics...
         </p>
       </div>
     );
   }
 
   return (
-    <div className="pt-28 pb-20 max-w-5xl mx-auto px-4 space-y-10">
-      {/* Profile Header Card */}
-      <div className="bg-card rounded-3xl p-8 border border-border shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(244,63,114,0.06)] relative overflow-hidden flex flex-col sm:flex-row items-center gap-8">
-        <div className="relative group">
-          <img
-            src={user?.avatarUrl || 'https://api.dicebear.com/7.x/initials/svg?seed=Love'}
-            alt={user?.name}
-            className="w-28 h-28 rounded-full border-4 border-background-secondary object-cover shadow-lg"
-          />
-          <button 
-            onClick={() => setIsEditing(true)}
-            className="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full shadow-lg hover:scale-110 transition-transform"
-          >
-            <Edit3 className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div className="space-y-3 text-center sm:text-left flex-1">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
-            <Heart className="w-3.5 h-3.5 fill-primary text-primary" />
-            <span>LoveDraw Member</span>
+    <div className="relative min-h-screen bg-black overflow-hidden pt-28 pb-20 selection:bg-marvel-blue/30 font-sans">
+      
+      {/* Iron Man HUD Background Effects */}
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-20">
+        <div className="w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-marvel-blue/10 via-black to-black" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-marvel-blue/30 rounded-full flex items-center justify-center">
+          <div className="w-[600px] h-[600px] border border-marvel-blue/20 rounded-full flex items-center justify-center animate-spin-slow">
+            <div className="w-[400px] h-[400px] border-2 border-dashed border-marvel-blue/40 rounded-full" />
           </div>
+        </div>
+        <div className="absolute top-0 left-0 w-full h-[2px] bg-marvel-blue/30 animate-scanline" />
+      </div>
 
-          <h1 className="font-serif text-3xl font-extrabold text-text-primary">{user?.name}</h1>
-          <p className="text-sm text-text-secondary">{user?.email}</p>
+      <div className="max-w-6xl mx-auto px-4 space-y-10 relative z-10">
+        
+        {/* Main Arc Reactor & Profile Header */}
+        <div className="bg-black/60 backdrop-blur-xl border-2 border-marvel-blue/50 p-8 shadow-[0_0_30px_rgba(81,140,202,0.15)] relative overflow-hidden flex flex-col md:flex-row items-center gap-12 group">
           
-          {user?.bio && (
-            <p className="text-sm text-text-muted italic max-w-md">"{user.bio}"</p>
-          )}
-
-          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 pt-2">
-            {user?.phone && (
-              <div className="flex items-center gap-1.5 text-xs text-text-secondary">
-                <Phone className="w-3.5 h-3.5" />
-                <span>{user.phone}</span>
+          {/* Arc Reactor Graphic */}
+          <div className="relative flex-shrink-0">
+            <div className="w-40 h-40 rounded-full border-4 border-marvel-blue/30 flex items-center justify-center relative shadow-[0_0_50px_rgba(81,140,202,0.2)]">
+              {/* Spinning rings */}
+              <motion.div className="absolute inset-0 border-2 border-dashed border-marvel-blue rounded-full" animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} />
+              <motion.div className="absolute inset-2 border-4 border-marvel-blue/50 rounded-full" animate={{ rotate: -360 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }} />
+              <motion.div className="absolute inset-6 border-2 border-dotted border-white rounded-full opacity-50" animate={{ rotate: 180 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} />
+              
+              {/* Inner Core */}
+              <div className="w-20 h-20 bg-marvel-blue rounded-full shadow-[0_0_30px_var(--marvel-blue)] flex items-center justify-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-white mix-blend-overlay opacity-50" />
+                <img src={user?.avatarUrl || `https://api.dicebear.com/7.x/bottts/svg?seed=${user?.id}`} className="w-full h-full object-cover mix-blend-luminosity opacity-80" alt="Avatar" />
               </div>
-            )}
-            {user?.dateOfBirth && (
-              <div className="flex items-center gap-1.5 text-xs text-text-secondary">
-                <Calendar className="w-3.5 h-3.5" />
-                <span>{formatDateIST(user.dateOfBirth)}</span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Stats Pills */}
-        <div className="flex sm:flex-col gap-4">
-          <div className="p-3 px-5 rounded-2xl bg-background-secondary border border-border text-center">
-            <span className="font-serif text-2xl font-bold text-text-primary block">{entries.length}</span>
-            <span className="text-[10px] text-text-muted uppercase font-semibold">Draws</span>
-          </div>
-          <div className="p-3 px-5 rounded-2xl bg-background-secondary border border-border text-center">
-            <span className="font-serif text-2xl font-bold text-accent block">{favoriteMessages.length}</span>
-            <span className="text-[10px] text-text-muted uppercase font-semibold">Saved Notes</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Sections Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Draw Entries History */}
-        <div className="bg-card rounded-3xl p-6 border border-border space-y-4">
-          <h3 className="font-serif text-xl font-bold text-text-primary flex items-center gap-2">
-            <Gift className="w-5 h-5 text-accent" />
-            Draw Participation History
-          </h3>
-
-          {entries.length === 0 ? (
-            <p className="text-xs text-text-muted italic py-6 text-center">
-              You haven't participated in any draws yet. Explore active draws! ❤️
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {entries.map((e) => (
-                <div key={e.id} className="p-4 rounded-2xl bg-background border border-border flex items-center justify-between">
-                  <div className="space-y-1">
-                    <p className="text-sm font-bold text-text-primary">{e.draw?.title}</p>
-                    <p className="font-mono text-xs text-text-muted">{e.referenceCode}</p>
-                  </div>
-                  <span className="text-[10px] font-semibold text-white uppercase bg-gradient-to-r from-primary to-accent px-2.5 py-1 rounded-full shadow-[0_0_10px_var(--glow-color)]">
-                    {e.paymentMode} CONFIRMED
-                  </span>
-                </div>
-              ))}
             </div>
-          )}
-        </div>
-
-        {/* Favorite Saved Messages */}
-        <div className="bg-card rounded-3xl p-6 border border-border space-y-4">
-          <h3 className="font-serif text-xl font-bold text-text-primary flex items-center gap-2">
-            <Bookmark className="w-5 h-5 text-primary" />
-            Saved Favorite Love Notes
-          </h3>
-
-          {favoriteMessages.length === 0 ? (
-            <p className="text-xs text-text-muted italic py-6 text-center">
-              No saved love notes yet. Click the bookmark icon on any note! 💌
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {favoriteMessages.map((m) => (
-                <div key={m.id} className="p-4 rounded-2xl bg-background border border-border space-y-1">
-                  <span className="text-[10px] font-bold text-accent uppercase">{m.category}</span>
-                  <p className="font-serif text-sm text-text-secondary italic">"{m.message}"</p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Edit Profile Modal */}
-      <AnimatePresence>
-        {isEditing && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-card w-full max-w-md rounded-3xl p-6 border border-border shadow-2xl relative"
+            
+            <button 
+              onClick={() => { playClick(); setIsEditing(true); }}
+              className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1 bg-black border border-marvel-blue text-marvel-blue text-[10px] font-bold uppercase tracking-widest hover:bg-marvel-blue hover:text-black transition-colors z-20 whitespace-nowrap"
             >
-              <button 
-                onClick={() => setIsEditing(false)}
-                className="absolute top-4 right-4 p-2 text-text-muted hover:text-text-primary transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <h2 className="font-serif text-2xl font-bold text-text-primary mb-6">Edit Profile</h2>
-
-              <form onSubmit={handleEditSubmit} className="space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Bio</label>
-                  <textarea
-                    value={editForm.bio}
-                    onChange={(e) => setEditForm({...editForm, bio: e.target.value})}
-                    placeholder="Write a short romantic bio..."
-                    className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:ring-2 focus:ring-primary/50 outline-none text-sm text-text-primary resize-none h-24"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Mobile Number</label>
-                  <input
-                    type="tel"
-                    value={editForm.phone}
-                    onChange={(e) => setEditForm({...editForm, phone: e.target.value})}
-                    placeholder="+91 9876543210"
-                    className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:ring-2 focus:ring-primary/50 outline-none text-sm text-text-primary"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Date of Birth</label>
-                  <input
-                    type="date"
-                    value={editForm.dateOfBirth}
-                    onChange={(e) => setEditForm({...editForm, dateOfBirth: e.target.value})}
-                    className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:ring-2 focus:ring-primary/50 outline-none text-sm text-text-primary"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-3.5 mt-4 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-[var(--glow-color)] hover:shadow-xl hover:-translate-y-0.5 transition-all"
-                >
-                  Save Changes
-                </button>
-              </form>
-            </motion.div>
+              Calibrate Suit
+            </button>
           </div>
-        )}
-      </AnimatePresence>
 
+          <div className="space-y-4 text-center md:text-left flex-1 relative z-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-marvel-blue/10 border border-marvel-blue/50 text-marvel-blue text-[10px] font-mono tracking-widest uppercase">
+              <Shield className="w-3.5 h-3.5" />
+              <span>Mark LXXXV Activated</span>
+            </div>
+
+            <h1 className="font-sans text-4xl md:text-5xl font-black text-white uppercase tracking-widest">{user?.name}</h1>
+            <p className="text-xs font-mono text-marvel-blue uppercase tracking-widest">{user?.email}</p>
+            
+            {user?.bio && (
+              <div className="p-3 bg-black border-l-2 border-marvel-blue">
+                <p className="text-xs font-mono text-slate-300 tracking-wider">"{user.bio}"</p>
+              </div>
+            )}
+
+            <div className="flex flex-wrap justify-center md:justify-start gap-6 pt-2">
+              {user?.phone && (
+                <div className="flex items-center gap-2 text-[10px] font-mono text-marvel-blue uppercase tracking-widest">
+                  <Phone className="w-4 h-4 text-white" />
+                  <span>Comm: {user.phone}</span>
+                </div>
+              )}
+              {user?.dateOfBirth && (
+                <div className="flex items-center gap-2 text-[10px] font-mono text-marvel-blue uppercase tracking-widest">
+                  <Calendar className="w-4 h-4 text-white" />
+                  <span>Init: {formatDateIST(user.dateOfBirth)}</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Stats Pills (Suit Diagnostics) */}
+          <div className="flex flex-row md:flex-col gap-4">
+            <div className="p-4 bg-black/80 border border-marvel-blue/30 text-center min-w-[120px]">
+              <span className="font-mono text-3xl font-black text-white block">{entries.length}</span>
+              <span className="text-[9px] text-marvel-blue uppercase tracking-widest font-bold mt-1 block">Combat Sims</span>
+            </div>
+            <div className="p-4 bg-black/80 border border-marvel-gold/30 text-center min-w-[120px]">
+              <span className="font-mono text-3xl font-black text-marvel-gold block">{favoriteMessages.length}</span>
+              <span className="text-[9px] text-marvel-gold uppercase tracking-widest font-bold mt-1 block">Data Archives</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Sections Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          
+          {/* Draw Entries History (Combat Sims) */}
+          <div className="bg-black/60 backdrop-blur-md border border-white/10 p-6 relative overflow-hidden group hover:border-marvel-blue/50 transition-colors">
+            <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-4">
+              <Target className="w-6 h-6 text-marvel-red" />
+              <h3 className="font-sans text-xl font-bold text-white uppercase tracking-widest">Mission Logs</h3>
+            </div>
+
+            {entries.length === 0 ? (
+              <div className="text-center py-8">
+                <Activity className="w-8 h-8 text-slate-600 mx-auto mb-2" />
+                <p className="text-[10px] text-slate-500 font-mono uppercase tracking-widest">No active deployments detected.</p>
+              </div>
+            ) : (
+              <div className="space-y-3 h-64 overflow-y-auto custom-scrollbar pr-2">
+                {entries.map((e) => (
+                  <div key={e.id} className="p-4 bg-black border border-white/10 flex items-center justify-between group-hover:border-marvel-red/30 transition-colors">
+                    <div className="space-y-1">
+                      <p className="text-xs font-bold text-white uppercase tracking-wider">{e.draw?.title}</p>
+                      <p className="font-mono text-[9px] text-slate-400 tracking-widest">ID: {e.referenceCode}</p>
+                    </div>
+                    <span className="text-[9px] font-bold text-marvel-red border border-marvel-red px-2 py-1 uppercase tracking-widest">
+                      {e.paymentMode} VERIFIED
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Favorite Saved Messages (Encrypted Memory Banks) */}
+          <div className="bg-black/60 backdrop-blur-md border border-white/10 p-6 relative overflow-hidden group hover:border-marvel-gold/50 transition-colors">
+            <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-4">
+              <Database className="w-6 h-6 text-marvel-gold" />
+              <h3 className="font-sans text-xl font-bold text-white uppercase tracking-widest">Encrypted Banks</h3>
+            </div>
+
+            {favoriteMessages.length === 0 ? (
+              <div className="text-center py-8">
+                <Server className="w-8 h-8 text-slate-600 mx-auto mb-2" />
+                <p className="text-[10px] text-slate-500 font-mono uppercase tracking-widest">Memory banks empty.</p>
+              </div>
+            ) : (
+              <div className="space-y-3 h-64 overflow-y-auto custom-scrollbar pr-2">
+                {favoriteMessages.map((m) => (
+                  <div key={m.id} className="p-4 bg-black border border-white/10 space-y-2 group-hover:border-marvel-gold/30 transition-colors">
+                    <span className="text-[9px] font-bold text-marvel-gold border border-marvel-gold px-2 py-0.5 uppercase tracking-widest bg-marvel-gold/10">
+                      CLASS: {m.category}
+                    </span>
+                    <p className="font-mono text-[11px] text-slate-300 leading-relaxed uppercase">
+                      &gt; {m.message}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Edit Profile Modal (Suit Calibration Terminal) */}
+        <AnimatePresence>
+          {isEditing && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                className="bg-black border-2 border-marvel-blue w-full max-w-lg p-8 shadow-[0_0_50px_rgba(81,140,202,0.3)] relative"
+              >
+                {/* Modal Scanline */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-marvel-blue/10 to-transparent h-[10%] translate-y-[-100%] animate-scanline pointer-events-none" />
+
+                <button 
+                  onClick={() => { playClick(); setIsEditing(false); }}
+                  className="absolute top-4 right-4 p-2 text-marvel-blue hover:bg-marvel-blue hover:text-black transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+
+                <div className="flex items-center gap-3 mb-8">
+                  <Cpu className="w-6 h-6 text-marvel-blue animate-pulse" />
+                  <h2 className="font-sans text-2xl font-black text-white uppercase tracking-[0.2em]">Suit Calibration</h2>
+                </div>
+
+                <form onSubmit={handleEditSubmit} className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-mono text-marvel-blue uppercase tracking-[0.2em]">System Designation (Bio)</label>
+                    <textarea
+                      value={editForm.bio}
+                      onChange={(e) => setEditForm({...editForm, bio: e.target.value})}
+                      placeholder="Input parameters..."
+                      className="w-full px-4 py-3 bg-black border border-marvel-blue/50 focus:border-marvel-blue focus:shadow-[0_0_15px_rgba(81,140,202,0.2)] outline-none text-white font-mono text-sm resize-none h-24 uppercase"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-mono text-marvel-blue uppercase tracking-[0.2em]">Comm Frequency (Mobile)</label>
+                    <input
+                      type="tel"
+                      value={editForm.phone}
+                      onChange={(e) => setEditForm({...editForm, phone: e.target.value})}
+                      placeholder="+91 9876543210"
+                      className="w-full px-4 py-3 bg-black border border-marvel-blue/50 focus:border-marvel-blue focus:shadow-[0_0_15px_rgba(81,140,202,0.2)] outline-none text-white font-mono text-sm uppercase"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-mono text-marvel-blue uppercase tracking-[0.2em]">Initialization Date (DOB)</label>
+                    <input
+                      type="date"
+                      value={editForm.dateOfBirth}
+                      onChange={(e) => setEditForm({...editForm, dateOfBirth: e.target.value})}
+                      className="w-full px-4 py-3 bg-black border border-marvel-blue/50 focus:border-marvel-blue focus:shadow-[0_0_15px_rgba(81,140,202,0.2)] outline-none text-white font-mono text-sm uppercase [color-scheme:dark]"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSaving}
+                    className="w-full py-4 mt-4 bg-marvel-blue/20 border-2 border-marvel-blue text-marvel-blue font-bold uppercase tracking-[0.3em] hover:bg-marvel-blue hover:text-black transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                  >
+                    {isSaving ? (
+                      <><Zap className="w-5 h-5 animate-pulse" /> Calibrating...</>
+                    ) : (
+                      <><Zap className="w-5 h-5" /> Execute Update</>
+                    )}
+                  </button>
+                </form>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
+
+      </div>
     </div>
   );
 };

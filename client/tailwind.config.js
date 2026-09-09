@@ -8,36 +8,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        burgundy: {
-          900: '#2A060B',
-          800: '#3B0910',
-          700: '#4A0E17',
-          600: '#62121F',
-          500: '#831B2C',
-        },
-        rose: {
-          300: '#FFB7C5',
-          400: '#F4A5B5',
-          500: '#E87A90',
-          600: '#D6546E',
-        },
-        blush: {
-          50: '#FFF9F9',
-          100: '#FFF0F2',
-          200: '#FDE8E9',
-          300: '#FAD2D4',
-        },
-        plum: {
-          950: '#150312',
-          900: '#1D0517',
-          800: '#2D0B1E',
-          700: '#3D102A',
-        },
-        gold: {
-          300: '#F5E6AB',
-          400: '#E6CA65',
-          500: '#D4AF37',
-          600: '#AA7C11',
+        marvel: {
+          red: '#E23636',
+          gold: '#F78F3F',
+          blue: '#518CCA',
+          navy: '#05162A',
+          black: '#000000',
+          silver: '#C0C0C0',
+          purple: '#6C4298',
+          green: '#28A745',
         },
         background: 'var(--background)',
         'background-secondary': 'var(--background-secondary)',
@@ -52,28 +31,44 @@ export default {
         accent: 'var(--accent)',
       },
       fontFamily: {
-        serif: ['Playfair Display', 'Georgia', 'serif'],
-        sans: ['Outfit', 'Inter', 'sans-serif'],
-        romantic: ['Dancing Script', 'cursive'],
+        serif: ['Orbitron', 'Playfair Display', 'Georgia', 'serif'], // Futuristic
+        sans: ['Rajdhani', 'Inter', 'sans-serif'], // Technical
+        comic: ['Bangers', 'cursive'],
       },
       animation: {
         'float-slow': 'float 8s ease-in-out infinite',
         'pulse-glow': 'pulseGlow 3s infinite alternate',
-        'envelope-open': 'envelopeOpen 1s forwards ease-in-out',
-        'shimmer': 'shimmer 2s infinite linear',
+        'hologram-flicker': 'hologramFlicker 4s infinite',
+        'scanline': 'scanline 6s linear infinite',
+        'energy-flow': 'energyFlow 3s infinite linear',
+        'portal-spin': 'portalSpin 10s linear infinite',
       },
       keyframes: {
         float: {
           '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
-          '50%': { transform: 'translateY(-15px) rotate(3deg)' },
+          '50%': { transform: 'translateY(-15px) rotate(2deg)' },
         },
         pulseGlow: {
-          '0%': { boxShadow: '0 0 15px rgba(232, 122, 144, 0.3)' },
-          '100%': { boxShadow: '0 0 35px rgba(212, 175, 55, 0.6)' },
+          '0%': { boxShadow: '0 0 15px var(--glow-color)' },
+          '100%': { boxShadow: '0 0 35px var(--glow-color)' },
         },
-        shimmer: {
-          '0%': { backgroundPosition: '-200% 0' },
-          '100%': { backgroundPosition: '200% 0' },
+        hologramFlicker: {
+          '0%, 19%, 21%, 23%, 25%, 54%, 56%, 100%': { opacity: '1' },
+          '20%, 24%, 55%': { opacity: '0.6' },
+          '22%': { opacity: '0.9' },
+        },
+        scanline: {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(100%)' },
+        },
+        energyFlow: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '100%': { backgroundPosition: '100% 50%' },
+        },
+        portalSpin: {
+          '0%': { transform: 'rotate(0deg) scale(1)' },
+          '50%': { transform: 'rotate(180deg) scale(1.05)' },
+          '100%': { transform: 'rotate(360deg) scale(1)' },
         }
       }
     },

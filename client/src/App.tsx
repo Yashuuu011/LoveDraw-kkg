@@ -1,11 +1,14 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { SocketProvider } from './context/SocketContext';
-import FloatingHearts from './components/FloatingHearts';
-import FlirtyMessages from './components/FlirtyMessages';
+import { SoundProvider } from './context/SoundContext';
+
+import CustomCursor from './components/CustomCursor';
+import PageTransition from './components/PageTransition';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
@@ -20,48 +23,63 @@ import Auth from './pages/Auth';
 import AdminDashboard from './pages/AdminDashboard';
 import Chat from './pages/Chat';
 import Friends from './pages/Friends';
+import Profile from './pages/Profile';
 import ProtectedRoute from './components/ProtectedRoute';
+
+const AnimatedRoutes = () => {
+  const location = useLocation();
+  
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+        <Route path="/daily-love" element={<PageTransition><DailyLove /></PageTransition>} />
+        <Route path="/draws" element={<PageTransition><Draws /></PageTransition>} />
+        <Route path="/draw/:id" element={<PageTransition><DrawDetail /></PageTransition>} />
+        <Route path="/draw/:id/winner" element={<PageTransition><WinnerReveal /></PageTransition>} />
+        <Route path="/memories" element={<PageTransition><Memories /></PageTransition>} />
+        <Route path="/friends" element={<ProtectedRoute><PageTransition><Friends /></PageTransition></ProtectedRoute>} />
+        <Route path="/chat" element={<ProtectedRoute><PageTransition><Chat /></PageTransition></ProtectedRoute>} />
+        <Route path="/login" element={<PageTransition><Auth /></PageTransition>} />
+        <Route path="/register" element={<PageTransition><Auth /></PageTransition>} />
+        <Route path="/forgot-password" element={<PageTransition><Auth /></PageTransition>} />
+        <Route path="/profile" element={<ProtectedRoute><PageTransition><Profile /></PageTransition></ProtectedRoute>} />
+        <Route path="/admin" element={<PageTransition><AdminDashboard /></PageTransition>} />
+      </Routes>
+    </AnimatePresence>
+  );
+};
 
 export const App: React.FC = () => {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <SocketProvider>
-          <ToastProvider>
-            <Router>
-              <div className="relative min-h-screen flex flex-col justify-between">
-              {/* Ambient Background Particles */}
-              <FloatingHearts />
-              <FlirtyMessages />
+      <SoundProvider>
+        <AuthProvider>
+          <SocketProvider>
+            <ToastProvider>
+              <Router>
+                <CustomCursor />
+                <div className="relative min-h-screen flex flex-col justify-between">
+                  <div className="film-grain" />
+                  {/* Scanline overlay for cinematic HUD effect */}
+                  <div className="scanlines" />
 
-              {/* Top Navigation */}
-              <Navbar />
+                  {/* Top Navigation HUD */}
+                  <Navbar />
 
-              {/* Main Application Body */}
-              <main className="flex-grow relative z-10">
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/daily-love" element={<DailyLove />} />
-                  <Route path="/draws" element={<Draws />} />
-                  <Route path="/draw/:id" element={<DrawDetail />} />
-                  <Route path="/draw/:id/winner" element={<WinnerReveal />} />
-                  <Route path="/memories" element={<Memories />} />
-                  <Route path="/friends" element={<ProtectedRoute><Friends /></ProtectedRoute>} />
-                  <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
-                  <Route path="/login" element={<Auth />} />
-                  <Route path="/register" element={<Auth />} />
-                  <Route path="/forgot-password" element={<Auth />} />
-                  <Route path="/admin" element={<AdminDashboard />} />
-                </Routes>
-              </main>
+                  {/* Main Application Body */}
+                  <main className="flex-grow relative z-10">
+                    <AnimatedRoutes />
+                  </main>
 
-              {/* Footer */}
-              <Footer />
-            </div>
-          </Router>
-          </ToastProvider>
-        </SocketProvider>
-      </AuthProvider>
+                  {/* Footer */}
+                  <Footer />
+                </div>
+              </Router>
+            </ToastProvider>
+          </SocketProvider>
+        </AuthProvider>
+      </SoundProvider>
     </ThemeProvider>
   );
 };
