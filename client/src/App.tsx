@@ -59,7 +59,7 @@ export const App: React.FC = () => {
               <Footer />
             </div>
           </Router>
-        </ToastProvider>
+          </ToastProvider>
         </SocketProvider>
       </AuthProvider>
     </ThemeProvider>

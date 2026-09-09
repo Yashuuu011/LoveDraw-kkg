@@ -224,7 +224,10 @@ export const getMe = async (req: AuthRequest, res: Response) => {
         id: user.id,
         name: user.name,
         email: user.email,
+        phone: user.phone,
         avatarUrl: user.avatarUrl,
+        bio: user.bio,
+        dateOfBirth: user.dateOfBirth,
         createdAt: user.createdAt,
         entriesCount: user.entries.length,
         winningsCount: user.winners.length,
@@ -255,13 +258,16 @@ export const forgotPassword = async (req: Request, res: Response) => {
 export const updateProfile = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) return res.status(401).json({ success: false, message: 'Not authenticated.' });
-    const { name, avatarUrl } = req.body;
+    const { name, avatarUrl, bio, phone, dateOfBirth } = req.body;
 
     const updatedUser = await prisma.user.update({
       where: { id: req.user.id },
       data: {
         ...(name && { name }),
-        ...(avatarUrl && { avatarUrl })
+        ...(avatarUrl && { avatarUrl }),
+        ...(bio !== undefined && { bio }),
+        ...(phone && { phone }),
+        ...(dateOfBirth && { dateOfBirth: new Date(dateOfBirth) })
       }
     });
 
@@ -272,7 +278,10 @@ export const updateProfile = async (req: AuthRequest, res: Response) => {
         id: updatedUser.id,
         name: updatedUser.name,
         email: updatedUser.email,
-        avatarUrl: updatedUser.avatarUrl
+        phone: updatedUser.phone,
+        avatarUrl: updatedUser.avatarUrl,
+        bio: updatedUser.bio,
+        dateOfBirth: updatedUser.dateOfBirth
       }
     });
   } catch (error) {

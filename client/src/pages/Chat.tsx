@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { useSocket } from '../context/SocketContext';
 import { useLocation } from 'react-router-dom';
+import { formatTimeIST, formatDateIST } from '../utils/dateFormatter';
 
 interface User {
   id: string;
@@ -41,7 +42,7 @@ export const Chat: React.FC = () => {
   const [typingUsers, setTypingUsers] = useState<{ [roomId: string]: string }>({});
 
   const { user } = useAuth();
-  const { showToast } = useToast();
+  const { addToast } = useToast();
   const { socket } = useSocket();
   const location = useLocation();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -170,7 +171,7 @@ export const Chat: React.FC = () => {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      showToast('File size must be less than 5MB', 'error');
+      addToast('File size must be less than 5MB', 'error');
       return;
     }
 
@@ -223,7 +224,7 @@ export const Chat: React.FC = () => {
         fetchRooms();
       }
     } catch (error: any) {
-      showToast(error.response?.data?.message || 'Failed to send message', 'error');
+      addToast(error.response?.data?.message || 'Failed to send message', 'error');
     } finally {
       setIsUploading(false);
     }
@@ -235,13 +236,13 @@ export const Chat: React.FC = () => {
 
   return (
     <div className="pt-24 pb-8 max-w-6xl mx-auto px-4 h-screen flex flex-col">
-      <div className="flex-1 flex overflow-hidden rounded-3xl shadow-2xl bg-white border-rose-200 dark:glass-panel dark:border-rose-400/30">
+      <div className="flex-1 flex overflow-hidden rounded-3xl shadow-2xl bg-card border border-border">
         
         {/* Sidebar - Rooms */}
-        <div className="w-1/3 border-r flex flex-col border-rose-100 dark:border-rose-400/30">
-          <div className="p-4 border-b border-rose-100 dark:border-rose-400/30">
-            <h2 className="font-serif text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
-              <MessageCircle className="w-5 h-5 text-rose-500" /> Messages
+        <div className="w-1/3 border-r flex flex-col border-border bg-background-secondary">
+          <div className="p-4 border-b border-border bg-card">
+            <h2 className="font-serif text-xl font-bold text-text-primary flex items-center gap-2">
+              <MessageCircle className="w-5 h-5 text-primary" /> Messages
             </h2>
           </div>
           <div className="flex-1 overflow-y-auto p-2 space-y-2">
@@ -252,60 +253,60 @@ export const Chat: React.FC = () => {
                 <button
                   key={room.id}
                   onClick={() => setSelectedRoom(room)}
-                  className={`w-full flex items-center gap-3 p-3 rounded-2xl transition-all ${selectedRoom?.id === room.id ? 'bg-rose-100 dark:bg-rose-500/20' : 'hover:bg-rose-50 dark:hover:bg-plum-800/50'}`}
+                  className={`w-full flex items-center gap-3 p-3 rounded-2xl transition-all ${selectedRoom?.id === room.id ? 'bg-border' : 'hover:bg-border/50'}`}
                 >
                   <div className="relative">
-                    <img src={partner?.avatarUrl || '/default-avatar.png'} alt={partner?.name} className="w-12 h-12 rounded-full bg-slate-200 object-cover" />
-                    <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white dark:border-plum-900 ${partner?.isOnline ? 'bg-emerald-500' : 'bg-slate-400'}`}></div>
+                    <img src={partner?.avatarUrl || '/default-avatar.png'} alt={partner?.name} className="w-12 h-12 rounded-full bg-background object-cover" />
+                    <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-card ${partner?.isOnline ? 'bg-emerald-500' : 'bg-text-muted'}`}></div>
                   </div>
                   <div className="flex-1 text-left overflow-hidden">
                     <div className="flex justify-between items-center">
-                      <span className="font-medium text-slate-800 dark:text-white truncate">{partner?.name}</span>
+                      <span className="font-medium text-text-primary truncate">{partner?.name}</span>
                       {lastMessage && (
-                        <span className="text-[10px] text-slate-500 dark:text-slate-300">
+                        <span className="text-[10px] text-text-muted">
                           {new Date(lastMessage.createdAt).toLocaleDateString() === new Date().toLocaleDateString() 
-                            ? new Date(lastMessage.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                            : new Date(lastMessage.createdAt).toLocaleDateString()}
+                            ? formatTimeIST(lastMessage.createdAt)
+                            : formatDateIST(lastMessage.createdAt)}
                         </span>
                       )}
                     </div>
                     {lastMessage ? (
-                      <p className="text-xs text-slate-500 dark:text-blush-200 truncate mt-0.5">
+                      <p className="text-xs text-text-secondary truncate mt-0.5">
                         {lastMessage.sender.id === user?.id ? 'You: ' : ''}
                         {lastMessage.content || (lastMessage.mediaUrl ? 'Attachment' : '')}
                       </p>
                     ) : (
-                      <p className="text-xs text-emerald-500 italic mt-0.5">Say hi! ❤️</p>
+                      <p className="text-xs text-primary italic mt-0.5">Say hi! ❤️</p>
                     )}
                   </div>
                 </button>
               );
             })}
             {rooms.length === 0 && (
-              <p className="text-center text-sm text-slate-500 dark:text-slate-300 mt-10 p-4">No active conversations. Head to the Friends page to start a chat!</p>
+              <p className="text-center text-sm text-text-muted mt-10 p-4">No active conversations. Head to the Friends page to start a chat!</p>
             )}
           </div>
         </div>
 
         {/* Chat Area */}
-        <div className="w-2/3 flex flex-col bg-slate-50/50 dark:bg-plum-900/10 relative">
+        <div className="w-2/3 flex flex-col bg-background relative">
           {selectedRoom ? (
             <>
               {/* Chat Header */}
-              <div className="p-4 border-b flex items-center justify-between border-rose-100 bg-white/80 dark:bg-plum-900/80 backdrop-blur-md z-10 dark:border-rose-400/30">
+              <div className="p-4 border-b flex items-center justify-between border-border bg-card/80 backdrop-blur-md z-10">
                 <div className="flex items-center gap-3">
                   <div className="relative">
-                    <img src={getPartner(selectedRoom)?.avatarUrl || '/default-avatar.png'} alt="Partner" className="w-10 h-10 rounded-full bg-white object-cover" />
+                    <img src={getPartner(selectedRoom)?.avatarUrl || '/default-avatar.png'} alt="Partner" className="w-10 h-10 rounded-full bg-card object-cover" />
                   </div>
                   <div>
-                    <h3 className="font-serif font-bold text-slate-800 dark:text-white leading-tight">
+                    <h3 className="font-serif font-bold text-text-primary leading-tight">
                       {getPartner(selectedRoom)?.name}
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-300">
+                    <p className="text-xs text-text-secondary">
                       {getPartner(selectedRoom)?.isOnline ? (
                         <span className="text-emerald-500 font-medium">Online</span>
                       ) : getPartner(selectedRoom)?.lastSeen ? (
-                        `Last seen ${new Date(getPartner(selectedRoom)!.lastSeen!).toLocaleString()}`
+                        `Last seen ${formatTimeIST(getPartner(selectedRoom)!.lastSeen!)}`
                       ) : 'Offline'}
                     </p>
                   </div>
@@ -318,10 +319,12 @@ export const Chat: React.FC = () => {
                   const isMe = msg.sender.id === user?.id;
                   return (
                     <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-[70%] rounded-2xl p-3 ${
+                      <div className={`max-w-[70%] rounded-2xl p-3 shadow-sm ${
                         isMe 
-                          ? 'bg-rose-500 text-white rounded-tr-sm shadow-md' 
-                          : 'bg-white text-slate-800 dark:text-white rounded-tl-sm shadow-sm border border-slate-100 dark:bg-plum-800 dark:border-plum-700 dark:text-white'
+                          // The specific dark mode and light mode colors requested for Sent
+                          ? 'bg-primary dark:bg-[#C92F5C] text-white rounded-tr-sm' 
+                          // The specific dark mode and light mode colors requested for Received
+                          : 'bg-card dark:bg-card-elevated text-text-primary rounded-tl-sm border border-border'
                       }`}>
                         {msg.mediaUrl && (
                           <div className="mb-2 rounded-xl overflow-hidden">
@@ -331,8 +334,8 @@ export const Chat: React.FC = () => {
                           </div>
                         )}
                         {msg.content && <p className="text-[15px] whitespace-pre-wrap leading-relaxed">{msg.content}</p>}
-                        <span className={`text-[10px] mt-1 block text-right ${isMe ? 'text-rose-100' : 'text-slate-400'}`}>
-                          {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        <span className={`text-[10px] mt-1 block text-right ${isMe ? 'text-white/70' : 'text-text-muted'}`}>
+                          {formatTimeIST(msg.createdAt)}
                         </span>
                       </div>
                     </div>
@@ -340,10 +343,10 @@ export const Chat: React.FC = () => {
                 })}
                 {typingUsers[selectedRoom.id] && (
                   <div className="flex justify-start">
-                    <div className="bg-white dark:bg-plum-800 border border-slate-100 dark:border-plum-700 rounded-2xl rounded-tl-sm p-3 shadow-sm flex gap-1 items-center">
-                      <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                      <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                      <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                    <div className="bg-card dark:bg-card-elevated border border-border rounded-2xl rounded-tl-sm p-3 shadow-sm flex gap-1 items-center">
+                      <span className="w-2 h-2 bg-text-muted rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                      <span className="w-2 h-2 bg-text-muted rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                      <span className="w-2 h-2 bg-text-muted rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
                     </div>
                   </div>
                 )}
@@ -352,12 +355,12 @@ export const Chat: React.FC = () => {
 
               {/* Attachment Preview */}
               {attachment && (
-                <div className="p-3 border-t border-rose-100 bg-white dark:border-rose-400/30 dark:bg-plum-900/80">
+                <div className="p-3 border-t border-border bg-card">
                   <div className="relative inline-block">
                     {attachment.type === 'IMAGE' && <img src={attachment.url} alt="Preview" className="h-20 rounded-lg shadow-sm" />}
                     {attachment.type === 'VIDEO' && <video src={attachment.url} className="h-20 rounded-lg shadow-sm" />}
-                    {attachment.type === 'AUDIO' && <div className="h-10 px-4 bg-slate-200 rounded-lg flex items-center text-xs text-slate-800 dark:text-white">Audio attached</div>}
-                    <button onClick={() => setAttachment(null)} className="absolute -top-2 -right-2 bg-rose-500 text-white rounded-full p-1 shadow-md hover:bg-rose-600 transition-colors">
+                    {attachment.type === 'AUDIO' && <div className="h-10 px-4 bg-background-secondary rounded-lg flex items-center text-xs text-text-primary">Audio attached</div>}
+                    <button onClick={() => setAttachment(null)} className="absolute -top-2 -right-2 bg-primary text-white rounded-full p-1 shadow-md hover:brightness-110 transition-colors">
                       <X className="w-3 h-3" />
                     </button>
                   </div>
@@ -365,7 +368,7 @@ export const Chat: React.FC = () => {
               )}
 
               {/* Input Area */}
-              <div className="p-3 border-t flex items-end gap-2 border-rose-100 bg-white dark:border-rose-400/30 dark:bg-plum-900/80">
+              <div className="p-3 border-t flex items-end gap-2 border-border bg-card/80 backdrop-blur-md">
                 <input 
                   type="file" 
                   ref={fileInputRef} 
@@ -376,7 +379,7 @@ export const Chat: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="p-3 rounded-full transition-colors bg-slate-50 text-slate-500 dark:text-slate-300 hover:text-rose-500 hover:bg-slate-100 dark:bg-plum-800 dark:text-rose-300 dark:hover:bg-plum-700"
+                  className="p-3 rounded-full transition-colors text-text-muted hover:text-primary hover:bg-background-secondary"
                 >
                   <Paperclip className="w-5 h-5" />
                 </button>
@@ -384,7 +387,7 @@ export const Chat: React.FC = () => {
                   value={newMessage}
                   onChange={handleInputChange}
                   placeholder="Type a message..."
-                  className="flex-1 rounded-2xl px-4 py-3 min-h-[48px] max-h-32 resize-none focus:outline-none bg-slate-50 border border-slate-200 text-slate-800 dark:text-white dark:bg-plum-800/90 dark:border-plum-700 dark:text-white dark:placeholder-slate-400 focus:border-rose-300 transition-colors"
+                  className="flex-1 rounded-2xl px-4 py-3 min-h-[48px] max-h-32 resize-none focus:outline-none bg-background border border-border text-text-primary placeholder:text-text-muted focus:border-primary transition-colors"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
@@ -395,7 +398,7 @@ export const Chat: React.FC = () => {
                 <button
                   onClick={() => sendMessage()}
                   disabled={isUploading || (!newMessage.trim() && !attachment)}
-                  className="p-3 rounded-full bg-rose-500 text-white shadow-md hover:bg-rose-600 disabled:opacity-50 transition-colors disabled:cursor-not-allowed"
+                  className="p-3 rounded-full bg-gradient-to-r from-primary to-accent text-white shadow-md hover:brightness-110 disabled:opacity-50 transition-colors disabled:cursor-not-allowed"
                 >
                   <Send className="w-5 h-5" />
                 </button>
@@ -403,11 +406,11 @@ export const Chat: React.FC = () => {
             </>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-center px-4">
-              <div className="w-24 h-24 bg-rose-50 dark:bg-plum-800/90 rounded-full flex items-center justify-center mb-6 shadow-inner border border-rose-100 dark:border-plum-700">
-                <Heart className="w-12 h-12 text-rose-400 fill-rose-400 opacity-60" />
+              <div className="w-24 h-24 bg-background-secondary rounded-full flex items-center justify-center mb-6 shadow-inner border border-border">
+                <Heart className="w-12 h-12 text-primary fill-primary opacity-60" />
               </div>
-              <h3 className="text-2xl font-serif font-bold text-slate-700 dark:text-white">Your Private Space</h3>
-              <p className="text-sm mt-3 max-w-sm text-slate-500 dark:text-blush-200 leading-relaxed">
+              <h3 className="text-2xl font-serif font-bold text-text-primary">Your Private Space</h3>
+              <p className="text-sm mt-3 max-w-sm text-text-secondary leading-relaxed">
                 Select a friend from the sidebar to start sharing memories, photos, and sweet messages securely.
               </p>
             </div>

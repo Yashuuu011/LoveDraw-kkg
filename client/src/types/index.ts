@@ -1,9 +1,11 @@
 export interface User {
   id: string;
   name: string;
-  email: string;
+  email: string | null;
+  phone?: string | null;
   avatarUrl?: string;
-  role?: string;
+  bio?: string | null;
+  dateOfBirth?: string | null;
   createdAt: string;
 }
 

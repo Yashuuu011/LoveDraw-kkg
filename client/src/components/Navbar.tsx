@@ -111,12 +111,31 @@ export const Navbar: React.FC = () => {
 
           {/* Desktop Right CTA / User Profile */}
           <div className="hidden md:flex items-center gap-4">
+            {/* Animated Pill Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full glass-card hover:bg-rose-500/10 transition-colors"
-              title="Toggle Theme"
+              className="relative w-16 h-8 rounded-full bg-background-secondary border border-border flex items-center p-1 cursor-pointer transition-all hover:shadow-[0_0_15px_var(--glow-color)]"
+              aria-label="Toggle Theme"
             >
-              {theme === 'dark' ? <Sun className="w-5 h-5 text-gold-300" /> : <Moon className="w-5 h-5 text-slate-600 dark:text-slate-200" />}
+              <div className="flex w-full justify-between px-1.5 z-0 text-sm">
+                <span>🌙</span>
+                <span>☀️</span>
+              </div>
+              <motion.div
+                layout
+                className="absolute w-6 h-6 bg-card rounded-full shadow-md flex items-center justify-center z-10"
+                initial={false}
+                animate={{
+                  left: theme === 'dark' ? '4px' : 'calc(100% - 28px)'
+                }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              >
+                {theme === 'dark' ? (
+                  <Moon className="w-3.5 h-3.5 text-accent" />
+                ) : (
+                  <Sun className="w-3.5 h-3.5 text-primary" />
+                )}
+              </motion.div>
             </button>
 
             {isAuthenticated && user ? (

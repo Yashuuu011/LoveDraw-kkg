@@ -17,6 +17,8 @@ model User {
   otpCode          String?
   otpExpiresAt     DateTime?
   avatarUrl        String?
+  bio              String?
+  dateOfBirth      DateTime?
   isOnline         Boolean           @default(false)
   lastSeen         DateTime          @default(now())
   createdAt        DateTime          @default(now())

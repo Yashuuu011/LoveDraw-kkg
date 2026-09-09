@@ -3,21 +3,41 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-rose-50 text-slate-800 font-sans selection:bg-rose-500 selection:text-white antialiased overflow-x-hidden min-h-screen transition-colors duration-500;
-    background-image: 
-      radial-gradient(at 0% 0%, rgba(255, 183, 197, 0.4) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(244, 165, 181, 0.5) 0px, transparent 50%),
-      radial-gradient(at 50% 100%, rgba(232, 122, 144, 0.4) 0px, transparent 50%);
-    background-attachment: fixed;
+  :root {
+    --background: #FFF7FA;
+    --background-secondary: #FFF0F5;
+    --card: #FFFFFF;
+    --card-elevated: #FFFDFE;
+    --text-primary: #3F1728;
+    --text-secondary: #7A5262;
+    --text-muted: #9CA3AF;
+    --border: #FBCFE8;
+    --primary: #E91E63;
+    --secondary: #F472B6;
+    --accent: #FB7185;
+    --glow-color: rgba(233, 30, 99, 0.15);
   }
-  
-  .dark body {
-    @apply bg-plum-950 text-slate-50;
-    background-image: 
-      radial-gradient(at 0% 0%, rgba(74, 14, 23, 0.4) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(45, 11, 30, 0.5) 0px, transparent 50%),
-      radial-gradient(at 50% 100%, rgba(59, 9, 16, 0.4) 0px, transparent 50%);
+
+  .dark {
+    --background: #120A10;
+    --background-secondary: #1A0D16;
+    --card: #24111D;
+    --card-elevated: #2D1523;
+    --text-primary: #FFF1F7;
+    --text-secondary: #E5BFCF;
+    --text-muted: #B58A9D;
+    --border: #4A2438;
+    --primary: #F43F72;
+    --secondary: #FB7185;
+    --accent: #F9A8D4;
+    --glow-color: rgba(244, 63, 114, 0.15);
+  }
+
+  body {
+    @apply font-sans antialiased overflow-x-hidden min-h-screen;
+    background-color: var(--background);
+    color: var(--text-primary);
+    transition: background-color 250ms ease, color 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
   }
 }
 
