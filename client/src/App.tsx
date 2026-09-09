@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import { ThemeProvider } from './context/ThemeContext';
 import FloatingHearts from './components/FloatingHearts';
+import FlirtyMessages from './components/FlirtyMessages';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
@@ -28,6 +29,7 @@ export const App: React.FC = () => {
             <div className="relative min-h-screen flex flex-col justify-between">
             {/* Ambient Background Particles */}
             <FloatingHearts />
+            <FlirtyMessages />
 
             {/* Top Navigation */}
             <Navbar />
