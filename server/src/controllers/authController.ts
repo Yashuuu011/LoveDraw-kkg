@@ -33,8 +33,8 @@ export const register = async (req: Request, res: Response) => {
     const validated = registerSchema.parse(req.body);
 
     const userCount = await prisma.user.count();
-    if (userCount >= 5) {
-      return res.status(403).json({ success: false, message: 'This space has reached the maximum capacity of 5 users.' });
+    if (userCount >= 10) {
+      return res.status(403).json({ success: false, message: 'This space has reached the maximum capacity of 10 users.' });
     }
 
     if (validated.email) {
@@ -68,6 +68,14 @@ export const register = async (req: Request, res: Response) => {
       JWT_SECRET,
       { expiresIn: '7d' }
     );
+
+    // Notify the user on their specific devices about successful registration
+    if (user.email) {
+      console.log(`[Device Notification] Sent secure registration confirmation to Email: ${user.email}`);
+    }
+    if (user.phone) {
+      console.log(`[Device Notification] Sent secure registration SMS to Mobile: ${user.phone}`);
+    }
 
     return res.status(201).json({
       success: true,

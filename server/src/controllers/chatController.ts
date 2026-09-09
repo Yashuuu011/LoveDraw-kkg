@@ -100,7 +100,7 @@ export const getMyRooms = async (req: AuthRequest, res: Response) => {
       where: { participants: { some: { userId: req.user.id } } },
       include: {
         participants: { include: { user: { select: { id: true, name: true, avatarUrl: true, isOnline: true, lastSeen: true } } } },
-        messages: { orderBy: { createdAt: 'desc' }, take: 1 } // Get last message
+        messages: { orderBy: { createdAt: 'desc' }, take: 1, include: { sender: { select: { id: true } } } } // Get last message with sender id
       },
       orderBy: { updatedAt: 'desc' }
     });

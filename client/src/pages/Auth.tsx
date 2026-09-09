@@ -203,6 +203,7 @@ export const Auth: React.FC = () => {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Peter Parker"
+                  autoComplete="name"
                   className="w-full pl-10 pr-4 py-2.5 bg-black/60 border border-marvel-blue/50 text-white text-sm focus:outline-none focus:border-marvel-blue focus:shadow-[0_0_15px_rgba(81,140,202,0.4)] transition-all font-sans"
                 />
               </div>
@@ -222,6 +223,7 @@ export const Auth: React.FC = () => {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="agent@shield.gov"
+                  autoComplete="email"
                   className="w-full pl-10 pr-4 py-2.5 bg-black/60 border border-marvel-blue/50 text-white text-sm focus:outline-none focus:border-marvel-blue focus:shadow-[0_0_15px_rgba(81,140,202,0.4)] transition-all font-sans"
                 />
               </div>
@@ -243,6 +245,7 @@ export const Auth: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="+919876543210"
                     disabled={otpSent}
+                    autoComplete="tel"
                     className={`w-full pl-10 pr-4 py-2.5 bg-black/60 border border-marvel-blue/50 text-white text-sm focus:outline-none focus:border-marvel-blue focus:shadow-[0_0_15px_rgba(81,140,202,0.4)] transition-all font-sans ${otpSent ? 'opacity-50' : ''}`}
                   />
                 </div>
@@ -272,6 +275,7 @@ export const Auth: React.FC = () => {
                   value={formData.otp}
                   onChange={(e) => setFormData({ ...formData, otp: e.target.value })}
                   placeholder="123456"
+                  autoComplete="one-time-code"
                   className="w-full pl-10 pr-4 py-2.5 bg-black/60 border border-marvel-gold/50 text-marvel-gold text-lg tracking-[0.5em] focus:outline-none focus:border-marvel-gold focus:shadow-[0_0_15px_rgba(247,143,63,0.4)] transition-all font-mono"
                 />
               </div>
@@ -296,6 +300,7 @@ export const Auth: React.FC = () => {
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   placeholder="••••••••"
+                  autoComplete={isRegister ? "new-password" : "current-password"}
                   className="w-full pl-10 pr-4 py-2.5 bg-black/60 border border-marvel-blue/50 text-white text-sm focus:outline-none focus:border-marvel-blue focus:shadow-[0_0_15px_rgba(81,140,202,0.4)] transition-all font-sans"
                 />
               </div>
