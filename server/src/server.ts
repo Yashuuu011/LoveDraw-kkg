@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
+import { createServer } from 'http';
 import authRoutes from './routes/authRoutes';
 import messageRoutes from './routes/messageRoutes';
 import drawRoutes from './routes/drawRoutes';
@@ -12,8 +13,10 @@ import winnerRoutes from './routes/winnerRoutes';
 import memoryRoutes from './routes/memoryRoutes';
 import adminRoutes from './routes/adminRoutes';
 import chatRoutes from './routes/chatRoutes';
+import friendRoutes from './routes/friendRoutes';
 import { errorHandler } from './middleware/errorHandler';
 import { initDatabase } from './utils/initDb';
+import { initializeSocket } from './socket';
 
 dotenv.config();
 
@@ -26,7 +29,11 @@ if (!process.env.DATABASE_URL) {
 }
 
 const app = express();
+const httpServer = createServer(app);
 const PORT = process.env.PORT || 5000;
+
+// Initialize Socket.IO
+initializeSocket(httpServer);
 
 // Security & Parsing Middleware
 app.use(helmet({
@@ -71,6 +78,7 @@ app.use('/api/winners', winnerRoutes);
 app.use('/api/memories', memoryRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/friends', friendRoutes);
 
 // Serve Frontend Client Static Dist in Unified Railway/Monorepo Deployment
 const clientDistPath = path.resolve(__dirname, '../../client/dist');
@@ -96,7 +104,7 @@ if (fs.existsSync(clientDistPath)) {
 app.use(errorHandler);
 
 if (!process.env.VERCEL) {
-  app.listen(PORT, async () => {
+  httpServer.listen(PORT, async () => {
     console.log(`
     ======================================================
     ❤️  LoveDraw Backend API Server Running  ❤️

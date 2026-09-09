@@ -8,21 +8,28 @@ generator client {
 }
 
 model User {
-  id           String            @id @default(uuid())
-  name         String
-  email        String?           @unique
-  phone        String?           @unique
-  passwordHash String?
-  otpCode      String?
-  otpExpiresAt DateTime?
-  avatarUrl    String?
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
-  entries      Entry[]
-  winners      Winner[]
-  favorites    FavoriteMessage[]
-  sentMessages ChatMessage[]     @relation("SentMessages")
-  chatRooms    ChatParticipant[]
+  id               String            @id @default(uuid())
+  name             String
+  username         String?           @unique
+  email            String?           @unique
+  phone            String?           @unique
+  passwordHash     String?
+  otpCode          String?
+  otpExpiresAt     DateTime?
+  avatarUrl        String?
+  isOnline         Boolean           @default(false)
+  lastSeen         DateTime          @default(now())
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  entries          Entry[]
+  winners          Winner[]
+  favorites        FavoriteMessage[]
+  sentMessages     ChatMessage[]     @relation("SentMessages")
+  chatRooms        ChatParticipant[]
+  friendships      Friendship[]      @relation("UserFriendships")
+  friendOf         Friendship[]      @relation("FriendToUser")
+  sentRequests     FriendRequest[]   @relation("SentRequests")
+  receivedRequests FriendRequest[]   @relation("ReceivedRequests")
 }
 
 model Admin {
@@ -151,4 +158,28 @@ model ChatMessage {
   createdAt  DateTime @default(now())
   chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
   sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+}
+
+model FriendRequest {
+  id         String   @id @default(uuid())
+  senderId   String
+  receiverId String
+  status     String   @default("PENDING") // PENDING, ACCEPTED, REJECTED
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  sender     User     @relation("SentRequests", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User     @relation("ReceivedRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+}
+
+model Friendship {
+  id        String   @id @default(uuid())
+  userId    String
+  friendId  String
+  createdAt DateTime @default(now())
+  user      User     @relation("UserFriendships", fields: [userId], references: [id], onDelete: Cascade)
+  friend    User     @relation("FriendToUser", fields: [friendId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, friendId])
 }

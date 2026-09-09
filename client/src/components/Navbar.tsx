@@ -38,6 +38,7 @@ export const Navbar: React.FC = () => {
     { name: 'Daily Love', path: '/daily-love' },
     { name: 'Draws', path: '/draws' },
     { name: 'Memories', path: '/memories' },
+    { name: 'Friends', path: '/friends' },
     { name: 'Private Chat', path: '/chat' },
     { name: 'How It Works', path: '/#how-it-works' },
   ];
@@ -86,7 +87,7 @@ export const Navbar: React.FC = () => {
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => {
-              if (link.path === '/chat' && !isAuthenticated) return null;
+              if ((link.path === '/chat' || link.path === '/friends') && !isAuthenticated) return null;
               const isActive = location.pathname === link.path;
               return (
                 <button

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import prisma from '../utils/prisma';
 import { AuthRequest } from '../middleware/auth';
+import { getIO } from '../socket';
 
 export const getUsers = async (req: AuthRequest, res: Response) => {
   try {
@@ -28,12 +29,30 @@ export const getUsers = async (req: AuthRequest, res: Response) => {
   }
 };
 
+const areFriends = async (userId: string, friendId: string) => {
+  const friendship = await prisma.friendship.findFirst({
+    where: {
+      OR: [
+        { userId, friendId },
+        { userId: friendId, friendId: userId }
+      ]
+    }
+  });
+  return !!friendship;
+};
+
 export const getOrCreateRoom = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) return res.status(401).json({ success: false, message: 'Not authenticated.' });
     
     const { partnerId } = req.body;
     if (!partnerId) return res.status(400).json({ success: false, message: 'partnerId is required.' });
+
+    // Enforce friendship!
+    const isFriend = await areFriends(req.user.id, partnerId);
+    if (!isFriend) {
+      return res.status(403).json({ success: false, message: 'You can only message confirmed friends.' });
+    }
 
     // Check if room already exists
     const existingRooms = await prisma.chatRoom.findMany({
@@ -44,7 +63,7 @@ export const getOrCreateRoom = async (req: AuthRequest, res: Response) => {
         ]
       },
       include: {
-        participants: { include: { user: { select: { id: true, name: true, avatarUrl: true } } } }
+        participants: { include: { user: { select: { id: true, name: true, avatarUrl: true, isOnline: true, lastSeen: true } } } }
       }
     });
 
@@ -63,7 +82,7 @@ export const getOrCreateRoom = async (req: AuthRequest, res: Response) => {
         }
       },
       include: {
-        participants: { include: { user: { select: { id: true, name: true, avatarUrl: true } } } }
+        participants: { include: { user: { select: { id: true, name: true, avatarUrl: true, isOnline: true, lastSeen: true } } } }
       }
     });
 
@@ -80,7 +99,7 @@ export const getMyRooms = async (req: AuthRequest, res: Response) => {
     const rooms = await prisma.chatRoom.findMany({
       where: { participants: { some: { userId: req.user.id } } },
       include: {
-        participants: { include: { user: { select: { id: true, name: true, avatarUrl: true } } } },
+        participants: { include: { user: { select: { id: true, name: true, avatarUrl: true, isOnline: true, lastSeen: true } } } },
         messages: { orderBy: { createdAt: 'desc' }, take: 1 } // Get last message
       },
       orderBy: { updatedAt: 'desc' }
@@ -126,10 +145,21 @@ export const sendMessage = async (req: AuthRequest, res: Response) => {
     }
 
     // Verify participation
-    const participant = await prisma.chatParticipant.findUnique({
-      where: { chatRoomId_userId: { chatRoomId: id, userId: req.user.id } }
+    const participants = await prisma.chatParticipant.findMany({
+      where: { chatRoomId: id }
     });
-    if (!participant) return res.status(403).json({ success: false, message: 'Access denied.' });
+    
+    const isParticipant = participants.some(p => p.userId === req.user?.id);
+    if (!isParticipant) return res.status(403).json({ success: false, message: 'Access denied.' });
+
+    // Verify friendship still exists before allowing send
+    const partnerId = participants.find(p => p.userId !== req.user?.id)?.userId;
+    if (partnerId) {
+      const isFriend = await areFriends(req.user.id, partnerId);
+      if (!isFriend) {
+         return res.status(403).json({ success: false, message: 'You are no longer friends with this user.' });
+      }
+    }
 
     const message = await prisma.chatMessage.create({
       data: {
@@ -147,6 +177,14 @@ export const sendMessage = async (req: AuthRequest, res: Response) => {
       where: { id },
       data: { updatedAt: new Date() }
     });
+
+    // Emit via Socket.io
+    const io = getIO();
+    io.to(id).emit('new_message', message);
+    if (partnerId) {
+      // Alert the partner directly in case they are not in the room yet
+      io.to(partnerId).emit('message_notification', { roomId: id, message });
+    }
 
     return res.status(201).json({ success: true, data: message });
   } catch (error) {
