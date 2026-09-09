@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserPlus, UserCheck, X, Search, ShieldCheck, Zap } from 'lucide-react';
+import { UserPlus, UserCheck, X, Search, ShieldCheck, Zap, MessageSquare } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { User } from '../types';
-import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { useSound } from '../context/SoundContext';
+import { useSocket } from '../context/SocketContext';
+import { useAuth } from '../context/AuthContext';
 
 export const Friends: React.FC = () => {
   const { user } = useAuth();
   const { addToast } = useToast();
   const { playClick, playNotification, playSuccess } = useSound();
+  const { socket } = useSocket();
+  const navigate = useNavigate();
 
   const [friends, setFriends] = useState<User[]>([]);
   const [requests, setRequests] = useState<{ id: string, sender: User }[]>([]);
@@ -31,6 +35,31 @@ export const Friends: React.FC = () => {
       playSuccess(); // Dramatic entry chord
     }, 500);
   }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    // Listen for incoming requests to update the UI instantly
+    const handleNewRequest = (data: any) => {
+      setRequests(prev => {
+        if (prev.find(r => r.id === data.requestId)) return prev;
+        return [{ id: data.requestId, sender: data.sender }, ...prev];
+      });
+    };
+
+    // Listen for accepted requests to update the friends list instantly
+    const handleAccepted = () => {
+      fetchFriendsAndRequests(); // Refresh data completely
+    };
+
+    socket.on('friend_request', handleNewRequest);
+    socket.on('friend_request_accepted', handleAccepted);
+
+    return () => {
+      socket.off('friend_request', handleNewRequest);
+      socket.off('friend_request_accepted', handleAccepted);
+    };
+  }, [socket]);
 
   const fetchFriendsAndRequests = async () => {
     try {
@@ -61,11 +90,14 @@ export const Friends: React.FC = () => {
 
   const handleSendRequest = async (receiverId: string) => {
     playClick();
+    console.log("Attempting to send request to:", receiverId);
     try {
-      await api.post('/friends/request', { receiverId });
+      const res = await api.post('/friends/request', { receiverId });
+      console.log("Request sent successfully:", res.data);
       addToast('RECRUITMENT SIGNAL SENT', 'success');
       setSearchResults(prev => prev.filter(u => u.id !== receiverId));
     } catch (error: any) {
+      console.error("Failed to send request:", error.response?.data || error);
       addToast(error.response?.data?.message || 'Failed to send signal', 'error');
     }
   };
@@ -89,6 +121,18 @@ export const Friends: React.FC = () => {
       setProcessedRequestId(null);
       setProcessType(null);
     }, 1000); // 1 second animation duration
+  };
+
+  const handleMessageFriend = async (friendId: string) => {
+    playClick();
+    try {
+      const res = await api.post('/chat/rooms', { partnerId: friendId });
+      if (res.data.success) {
+        navigate('/chat', { state: { roomId: res.data.data.id } });
+      }
+    } catch (error) {
+      addToast('Failed to start secure channel.', 'error');
+    }
   };
 
   return (
@@ -178,7 +222,7 @@ export const Friends: React.FC = () => {
                     <div className="w-16 h-16 bg-marvel-navy border-2 border-marvel-blue flex items-center justify-center">
                       <img src={friend.avatarUrl || `https://api.dicebear.com/7.x/bottts/svg?seed=${friend.id}`} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" alt={friend.name} />
                     </div>
-                    <div>
+                    <div className="flex-1">
                       <h3 className="text-lg font-bold text-white uppercase tracking-widest">{friend.name}</h3>
                       <p className="text-[10px] text-marvel-blue uppercase tracking-[0.2em]">Field Agent</p>
                       <div className="flex items-center gap-1 mt-2">
@@ -186,6 +230,13 @@ export const Friends: React.FC = () => {
                         <span className="text-[9px] text-marvel-blue font-mono tracking-widest">STABLE</span>
                       </div>
                     </div>
+                    <button
+                      onClick={() => handleMessageFriend(friend.id)}
+                      className="p-3 bg-marvel-blue/10 border border-marvel-blue text-marvel-blue hover:bg-marvel-blue hover:text-black transition-all shadow-[0_0_15px_rgba(81,140,202,0.2)] hover:shadow-[0_0_20px_rgba(81,140,202,0.6)]"
+                      title="Start Secure Channel"
+                    >
+                      <MessageSquare className="w-5 h-5" />
+                    </button>
                   </div>
                 </motion.div>
               ))}
@@ -308,10 +359,11 @@ export const Friends: React.FC = () => {
                     </div>
                     <button
                       onClick={() => handleSendRequest(u.id)}
-                      className="p-2 border border-marvel-blue text-marvel-blue hover:bg-marvel-blue hover:text-black transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 bg-marvel-blue/10 border border-marvel-blue text-marvel-blue hover:bg-marvel-blue hover:text-black transition-colors"
                       title="Send Request"
                     >
                       <UserPlus className="w-4 h-4" />
+                      <span className="text-[10px] font-bold font-mono tracking-widest">ADD HERO</span>
                     </button>
                   </div>
                 ))}

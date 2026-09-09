@@ -6,6 +6,35 @@ export async function initDatabase() {
   try {
     // Check if database tables exist by counting users
     await prisma.user.count();
+
+    // Ensure Ketan exists so the user can search for him!
+    const bcrypt = require('bcryptjs');
+    const hashedPassword = await bcrypt.hash('password123', 10);
+    await prisma.user.upsert({
+      where: { email: 'ketan@shield.com' },
+      update: {},
+      create: {
+        name: 'Ketan Gehlot',
+        email: 'ketan@shield.com',
+        phone: '9999999999',
+        password: hashedPassword,
+        avatarUrl: 'https://api.dicebear.com/7.x/bottts/svg?seed=ketan'
+      }
+    });
+
+    // Ensure Peter exists!
+    await prisma.user.upsert({
+      where: { email: 'peter@shield.com' },
+      update: {},
+      create: {
+        name: 'Peter Parker',
+        email: 'peter@shield.com',
+        phone: '8888888888',
+        password: hashedPassword,
+        avatarUrl: 'https://api.dicebear.com/7.x/bottts/svg?seed=peter'
+      }
+    });
+
   } catch (error) {
     console.log('📦 Database not initialized or tables missing. Running database setup...');
     try {

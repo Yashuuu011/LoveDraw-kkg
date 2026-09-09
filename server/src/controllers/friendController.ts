@@ -45,9 +45,25 @@ export const sendFriendRequest = async (req: AuthRequest, res: Response) => {
       return res.status(400).json({ success: false, message: 'A pending friend request already exists between you two.' });
     }
 
-    const request = await prisma.friendRequest.create({
-      data: { senderId, receiverId }
+    let request = await prisma.friendRequest.findFirst({
+      where: { senderId, receiverId }
     });
+
+    try {
+      if (request) {
+        request = await prisma.friendRequest.update({
+          where: { id: request.id },
+          data: { status: 'PENDING', createdAt: new Date() }
+        });
+      } else {
+        request = await prisma.friendRequest.create({
+          data: { senderId, receiverId }
+        });
+      }
+    } catch (dbError: any) {
+      console.error('Database Error in Friend Request:', dbError);
+      return res.status(500).json({ success: false, message: 'Database failed to process the request.' });
+    }
 
     // Notify receiver
     const senderUser = await prisma.user.findUnique({ where: { id: senderId } });
@@ -62,8 +78,9 @@ export const sendFriendRequest = async (req: AuthRequest, res: Response) => {
     });
 
     return res.status(201).json({ success: true, data: request });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: 'Failed to send friend request.' });
+  } catch (error: any) {
+    console.error('Friend request error:', error);
+    return res.status(500).json({ success: false, message: error.message || 'Failed to send friend request.' });
   }
 };
 

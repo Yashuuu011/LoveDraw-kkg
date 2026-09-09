@@ -41,6 +41,7 @@ export const Chat: React.FC = () => {
   const [attachment, setAttachment] = useState<{ url: string, type: string } | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [typingUsers, setTypingUsers] = useState<{ [roomId: string]: string }>({});
+  const [friends, setFriends] = useState<User[]>([]);
 
   const { user } = useAuth();
   const { addToast } = useToast();
@@ -51,7 +52,27 @@ export const Chat: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => { fetchRooms(); }, []);
+  const fetchFriends = async () => {
+    try {
+      const res = await api.get('/friends');
+      if (res.data.success) setFriends(res.data.data);
+    } catch (error) { console.error('Failed to fetch friends', error); }
+  };
+
+  const startChat = async (partnerId: string) => {
+    playClick();
+    try {
+      const res = await api.post('/chat/rooms', { partnerId });
+      if (res.data.success) {
+        await fetchRooms();
+        setSelectedRoom(res.data.data);
+      }
+    } catch (error) {
+      addToast('Failed to start secure channel.', 'error');
+    }
+  };
+
+  useEffect(() => { fetchRooms(); fetchFriends(); }, []);
 
   useEffect(() => {
     if (rooms.length > 0 && location.state?.roomId) {
@@ -189,12 +210,31 @@ export const Chat: React.FC = () => {
 
         {/* Sidebar - Rooms */}
         <div className="w-1/3 border-r-2 flex flex-col border-marvel-red/50 bg-black/60">
-          <div className="p-4 border-b-2 border-marvel-red/50 bg-marvel-red/10">
+          <div className="p-4 border-b-2 border-marvel-red/50 bg-marvel-red/10 flex flex-col">
             <h2 className="font-sans text-xl font-black text-marvel-gold uppercase tracking-widest flex items-center gap-3">
               <Signal className="w-5 h-5 text-marvel-red animate-pulse" /> 
               Comms Network
             </h2>
           </div>
+          
+          {/* New Chat from Friends */}
+          <div className="p-4 border-b border-marvel-red/30 bg-black/40">
+            <h3 className="text-[10px] text-marvel-gold font-mono uppercase mb-3 tracking-widest">Start Transmitting</h3>
+            <div className="flex gap-3 overflow-x-auto custom-scrollbar pb-2">
+              {friends.map(friend => (
+                <button
+                  key={friend.id}
+                  onClick={() => startChat(friend.id)}
+                  className="flex-shrink-0 w-12 h-12 rounded-full border-2 border-marvel-red/50 relative overflow-hidden group hover:border-marvel-gold transition-colors"
+                  title={`Message ${friend.name}`}
+                >
+                  <img src={friend.avatarUrl || `https://api.dicebear.com/7.x/bottts/svg?seed=${friend.id}`} alt={friend.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
+                </button>
+              ))}
+              {friends.length === 0 && <span className="text-[10px] text-white/50">No active agents found in roster.</span>}
+            </div>
+          </div>
+
           <div className="flex-1 overflow-y-auto p-2 space-y-2 custom-scrollbar">
             {rooms.map(room => {
               const partner = getPartner(room);
